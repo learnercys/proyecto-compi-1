@@ -1,12 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import java.net.URL?>
-
-<BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.project.controllers.MainCtrl">
-    <stylesheets>
-        <URL value="@css/styles.css" />
-    </stylesheets>
-
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.BorderPane ?>
+<?import javafx.scene.layout.VBox?>
+<BorderPane
+        fx:id="root"
+        maxHeight="-Infinity"
+        maxWidth="-Infinity"
+        minHeight="-Infinity"
+        minWidth="-Infinity"
+        prefHeight="400.0"
+        prefWidth="600.0"
+        xmlns="http://javafx.com/javafx/8"
+        xmlns:fx="http://javafx.com/fxml/1"
+        fx:controller="net.project.controllers.MainCtrl">
+    <top>
+        <VBox BorderPane.alignment="CENTER">
+            <children>
+                <MenuBar>
+                    <menus>
+                        <Menu mnemonicParsing="false" text="File">
+                            <items>
+                                <MenuItem mnemonicParsing="false" text="New" />
+                                <MenuItem mnemonicParsing="false" text="Open" />
+                                <MenuItem mnemonicParsing="false" text="Save" />
+                                <MenuItem mnemonicParsing="false" text="Save as" />
+                                <MenuItem mnemonicParsing="false" text="Close" />
+                            </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="Execute">
+                            <items>
+                                <MenuItem mnemonicParsing="false" text="Execute configuration file" />
+                                <MenuItem mnemonicParsing="false" text="Execute download scenario file" />
+                                <MenuItem mnemonicParsing="false" text="Execute game" />
+                                <MenuItem mnemonicParsing="false" text="Errors list" />
+                                <MenuItem mnemonicParsing="false" text="Symbol table" />
+                            </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="Help">
+                            <items>
+                                <MenuItem mnemonicParsing="false" text="User manual" />
+                                <MenuItem mnemonicParsing="false" text="Technical manual" />
+                                <MenuItem mnemonicParsing="false" text="About us" />
+                            </items>
+                        </Menu>
+                    </menus>
+                </MenuBar>
+            </children>
+        </VBox>
+    </top>
 </BorderPane>
