@@ -7,12 +7,14 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 /**
- * @author learnercys
+ * @author learnercys (learner.cys@gmail.com)
  * Created on 3/9/15.
  */
-public class Main extends Application{
-    public static final String APP_TITLE = "";
+public class Main extends Application {
+
+    public static final String APP_TITLE = "Game solution";
     public static java.net.URL appBase;
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         // defining base route.

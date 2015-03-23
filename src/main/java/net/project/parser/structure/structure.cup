@@ -1,0 +1,211 @@
+package net.project.parser.structure;
+
+import java_cup.runtime.Symbol;
+
+/*
+ * Code inserted in StructureParser
+ */
+parser code
+{:
+	public boolean hasUnRecoveredSyntaxError = false;
+
+	public void syntax_error(Symbol cur_token) {
+		// nothing to do, just to avoid native syntax_error method.
+	}
+
+	public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception {
+		// has some un-recovered syntax error(structure error)
+		this.hasUnRecoveredSyntaxError = true;
+	}
+:}
+
+/*
+ * Terminals
+ */
+terminal String
+
+    // main structures (tags)
+    init_configuration,
+    end_configuration,
+    init_background,
+    end_background,
+    init_figure,
+    end_figure,
+    init_design,
+    end_design,
+
+    // single chars
+    comma,
+    open_brace,
+    close_brace,
+    equal,
+    semicolon,
+
+    // single words
+    x_name,
+    x_picture,
+    x_type,
+    x_hero,
+    x_enemy,
+    x_live,
+    x_destroy,
+    x_description,
+    x_finish,
+    x_block,
+    x_bonus,
+    x_bomb,
+    x_weapon,
+    x_credit,
+
+    // ER
+    id,
+    path,
+    int_value,
+    string_value;
+
+
+/*
+ * Non terminals
+ */
+non terminal
+    START,
+    ELEMENTS,
+    ELEMENT,
+
+    BACKGROUND,
+    BG_IN,
+    BG_OBJECT,
+    BG_ELEMENTS,
+    BG_ELEMENT,
+    BG_X_NAME,
+    BG_X_PICTURE,
+
+    FIGURE,
+    FG_IN,
+    FG_OBJECT,
+    FG_ELEMENTS,
+    FG_ELEMENT,
+    FG_X_NAME,
+    FG_X_PICTURE,
+    FG_X_TYPE,
+    FG_X_TYPE_VALUE,
+    FG_X_LIVE,
+    FG_X_DESTROY,
+    FG_X_DESCRIPTION,
+
+    DESIGN,
+    DG_IN,
+    DG_OBJECT,
+    DG_ELEMENTS,
+    DG_ELEMENT,
+    DG_X_NAME,
+    DG_X_TYPE,
+    DG_X_TYPE_VALUE,
+    DG_X_PICTURE,
+    DG_X_DESTROY,
+    DG_X_CREDIT;
+
+// init structure
+START::= init_configuration ELEMENTS end_configuration;
+
+ELEMENTS::= ELEMENT ELEMENTS
+            | ELEMENT;
+
+ELEMENT::=  BACKGROUND
+            | FIGURE
+            | DESIGN;
+
+
+/*
+ * Background structure
+ */
+BACKGROUND::= init_background BG_IN end_background;
+
+BG_IN::=    BG_OBJECT comma BG_IN
+            | BG_OBJECT;
+
+BG_OBJECT::= open_brace BG_ELEMENTS close_brace;
+
+BG_ELEMENTS::=  BG_ELEMENT BG_ELEMENTS
+                | BG_ELEMENT;
+
+BG_ELEMENT::=   BG_X_NAME
+                | BG_X_PICTURE;
+
+BG_X_NAME::= x_name equal id semicolon;
+
+BG_X_PICTURE::= x_picture equal path semicolon;
+
+
+ /*
+  * Figure structure.
+  */
+FIGURE::= init_figure FG_IN end_figure;
+
+FG_IN::=    FG_OBJECT comma FG_IN
+            | FG_OBJECT;
+
+FG_OBJECT::= open_brace FG_ELEMENTS close_brace;
+
+FG_ELEMENTS::=  FG_ELEMENT FG_ELEMENTS
+                | FG_ELEMENT;
+
+FG_ELEMENT::=   FG_X_NAME
+                | FG_X_PICTURE
+                | FG_X_TYPE
+                | FG_X_LIVE
+                | FG_X_DESTROY
+                | FG_X_DESCRIPTION;
+
+FG_X_NAME::= x_name equal id semicolon;
+
+FG_X_PICTURE::= x_picture equal path semicolon;
+
+FG_X_TYPE::=    x_type equal FG_X_TYPE_VALUE semicolon;
+
+FG_X_TYPE_VALUE::=  x_hero
+                    | x_enemy;
+
+FG_X_LIVE::= x_live equal int_value semicolon;
+
+FG_X_DESTROY::= x_destroy equal int_value semicolon;
+
+FG_X_DESCRIPTION::= x_description equal string_value semicolon;
+
+
+
+/*
+ * Design structure
+ */
+DESIGN::= init_design DG_IN end_design;
+
+DG_IN::=    DG_OBJECT comma DG_IN
+            | DG_OBJECT;
+
+DG_OBJECT::= open_brace DG_ELEMENTS close_brace;
+
+DG_ELEMENTS::= DG_ELEMENT DG_ELEMENTS
+                | DG_ELEMENT;
+
+DG_ELEMENT::=   DG_X_NAME
+                | DG_X_TYPE
+                | DG_X_PICTURE
+                | DG_X_DESTROY
+                | DG_X_CREDIT;
+
+DG_X_NAME::= x_name equal id semicolon;
+
+DG_X_TYPE::= x_type equal DG_X_TYPE_VALUE semicolon;
+
+DG_X_TYPE_VALUE::=  x_finish
+                    | x_block
+                    | x_bonus
+                    | x_bomb
+                    | x_weapon;
+
+DG_X_PICTURE::= x_picture equal path semicolon;
+
+DG_X_DESTROY::= x_destroy equal int_value semicolon;
+
+DG_X_CREDIT::= x_credit equal int_value semicolon;
+
