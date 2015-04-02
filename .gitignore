@@ -22,3 +22,5 @@ gradle
 .idea
 
 *.java~
+
+gradlew.bat
