@@ -18,9 +18,17 @@ hs_err_pid*
 
 build
 .gradle
-gradle
+gradleinicia
 .idea
 
 *.java~
 
 gradlew.bat
+
+gradlew
+
+.directory
+
+
+gradle
+
