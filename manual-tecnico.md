@@ -30,6 +30,14 @@ Instalación en Linux(Ubuntu):
 Instalación:
 	`sudo apt-get install git`
 
+#### Java 8
+Instalación desde PPA:
+```
+sudo add-apt-repository ppa:webupd8team/java
+sudo apt-get update
+sudo apt-get install oracle-java8-installer
+```
+
 ### Construcción del Proyecto
 
 Para clonar el proyecto se utilizá el siguiente comando:

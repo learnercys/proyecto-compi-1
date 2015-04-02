@@ -11,7 +11,6 @@ import net.project.parser.scenario.sym;
 %unicode
 %line
 %column
-%ignorecase
 %cupsym sym
 %cup
 
@@ -54,7 +53,7 @@ height          = "alto"
 width           = "ancho"
 
 // ER
-id              = [a-z][a-z0-9]+
+id              = [a-zA-Z][a-za-Z0-9]+
 intValue        = [:digit:]+
 
 // main tags

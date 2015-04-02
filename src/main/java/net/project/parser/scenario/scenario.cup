@@ -13,7 +13,7 @@ parser code
         // just to avoid native syntax_error method.
     }
 
-    public void unrecovered_syntax_error( Symbol s ) throws java.lang Exception {
+    public void unrecovered_syntax_error( Symbol s ) throws java.lang.Exception {
         // has an un-recovered syntax error(structure error)
         this.hasUnRecoveredSyntaxError = true;
     }
