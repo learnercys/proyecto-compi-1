@@ -37,9 +37,9 @@ openParens  = "("
 semicolon   = ";"
 
 // tags single words
-xScenario      = "x-escenario"
+xScenario       = "x-escenario"
 xCharacters     = "x-personajes"
-xHeroes          = "x-heroes"
+xHeroes         = "x-heroes"
 xEnemies        = "x-enemigos"
 xWalls          = "x-paredes"
 xExtras         = "x-extras"
@@ -76,8 +76,8 @@ endWalls        = {lessThanS} {xWalls} {moreThan}
 initExtras      = {lessThan}  {xExtras} {moreThan}
 endExtras       = {lessThanS} {xExtras} {moreThan}
 
-initWeapons      = {lessThan}  {xWeapon} {moreThan}
-endWeapons       = {lessThanS} {xWeapon} {moreThan}
+initWeapons     = {lessThan}  {xWeapon} {moreThan}
+endWeapons      = {lessThanS} {xWeapon} {moreThan}
 
 initBonus       = {lessThan}  {xBonus} {moreThan}
 endBonus        = {lessThanS} {xBonus} {moreThan}
@@ -91,7 +91,7 @@ finish          = {lessThan} {xFinish} {moreThan}
 {initScenario} { return symbol( sym.init_scenario ); }
 {endScenario}  { return symbol( sym.end_scenario ); }
 
-{initCharacters} { return symbol( sym.init_characters ); }
+{initCharacters}    { return symbol( sym.init_characters ); }
 {endCharacters}     { return symbol( sym.end_characters ); }
 
 {initHeroes}    { return symbol( sym.init_heroes ); }
@@ -106,8 +106,8 @@ finish          = {lessThan} {xFinish} {moreThan}
 {initExtras}    { return symbol( sym.init_extras ); }
 {endExtras}     { return symbol( sym.end_extras ); }
 
-{initWeapons}    { return symbol( sym.init_weapons ); }
-{endWeapons}     { return symbol( sym.end_weapons ); }
+{initWeapons}   { return symbol( sym.init_weapons ); }
+{endWeapons}    { return symbol( sym.end_weapons ); }
 
 {initBonus}     { return symbol( sym.init_bonus ); }
 {endBonus}      { return symbol( sym.end_bonus ); }
