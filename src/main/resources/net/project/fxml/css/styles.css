@@ -5,6 +5,18 @@
     -fx-font-size: 18px;
 }
 
+.h2 {
+    -fx-font-size: 16px;
+}
+
+.h3 {
+    -fx-font-size: 14px;
+}
+
+.h4 {
+    -fx-font-size: 12px;
+}
+
 .header {
     -fx-padding: 15px;
 }

@@ -12,4 +12,13 @@ public class StructureArea extends AbstractArea {
     public void doCompilation() {
 
     }
+
+    /**
+     * TODO verify if the current area has errors
+     *
+     * @return has errors?
+     */
+    public boolean hasErrors ( ) {
+        return false;
+    }
 }

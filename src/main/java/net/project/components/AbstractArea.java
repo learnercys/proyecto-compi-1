@@ -60,4 +60,6 @@ public abstract class AbstractArea extends CodeArea {
 
     abstract void doCompilation();
 
+    abstract boolean hasErrors();
+
 }

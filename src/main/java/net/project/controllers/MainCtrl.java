@@ -4,6 +4,8 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -11,6 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -28,7 +31,12 @@ public class MainCtrl implements Initializable{
     @FXML private BorderPane root;
     @FXML private BorderPane cAreaContainer;
     @FXML private BorderPane sAreaContainer;
+    @FXML private VBox noObjectsContainer;
+    @FXML private VBox objectsContainer;
+    @FXML private VBox noPreviewContainer;
 
+    private BooleanProperty objectsInSidebar = new SimpleBooleanProperty(false);
+    private BooleanProperty isPreviewOK = new SimpleBooleanProperty(false);
     private StructureArea sArea;
     private ConfigArea cArea;
 
@@ -68,6 +76,7 @@ public class MainCtrl implements Initializable{
      */
     public void loadConfigFile () {
         cArea.doCompilation();
+        objectsInSidebar.setValue(!cArea.hasErrors());
     }
 
     /**
@@ -191,6 +200,17 @@ public class MainCtrl implements Initializable{
         // injecting structure area.
         sArea = new StructureArea();
         sAreaContainer.setCenter(sArea);
+
+        // sidebar
+        noObjectsContainer.managedProperty().bind(noObjectsContainer.visibleProperty());
+        noObjectsContainer.visibleProperty().bind(objectsInSidebar.not());
+
+        objectsContainer.managedProperty().bind(objectsContainer.visibleProperty());
+        objectsContainer.visibleProperty().bind(objectsInSidebar);
+
+        // preview
+        noPreviewContainer.managedProperty().bind(noPreviewContainer.visibleProperty());
+        noPreviewContainer.visibleProperty().bind(isPreviewOK.not());
 
     }
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import java.net.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
@@ -16,20 +17,20 @@
                     <menus>
                         <Menu mnemonicParsing="false" text="File">
                             <items>
-                                <MenuItem mnemonicParsing="false" text="New" onAction="#newFile" />
-                                <MenuItem mnemonicParsing="false" text="Open" onAction="#openFile" />
-                                <MenuItem mnemonicParsing="false" text="Save" onAction="#saveFile"/>
-                                <MenuItem mnemonicParsing="false" text="Save as" onAction="#saveFileAs"/>
+                                <MenuItem mnemonicParsing="false" onAction="#newFile" text="New" />
+                                <MenuItem mnemonicParsing="false" onAction="#openFile" text="Open" />
+                                <MenuItem mnemonicParsing="false" onAction="#saveFile" text="Save" />
+                                <MenuItem mnemonicParsing="false" onAction="#saveFileAs" text="Save as" />
                                 <MenuItem mnemonicParsing="false" onAction="#closeApp" text="Close" />
                             </items>
                         </Menu>
                         <Menu mnemonicParsing="false" text="Execute">
                             <items>
-                                <MenuItem mnemonicParsing="false" text="Execute configuration file" onAction="#loadConfigFile"/>
-                                <MenuItem mnemonicParsing="false" text="Execute structure file" onAction="#loadStructureFile" />
-                                <MenuItem mnemonicParsing="false" text="Execute game"  onAction="#executeGame"/>
-                                <MenuItem mnemonicParsing="false" text="Errors list" onAction="#showErrorsList"/>
-                                <MenuItem mnemonicParsing="false" text="Symbols table" onAction="#showSymbolsTable"/>
+                                <MenuItem mnemonicParsing="false" onAction="#loadConfigFile" text="Execute configuration file" />
+                                <MenuItem mnemonicParsing="false" onAction="#loadStructureFile" text="Execute structure file" />
+                                <MenuItem mnemonicParsing="false" onAction="#executeGame" text="Execute game" />
+                                <MenuItem mnemonicParsing="false" onAction="#showErrorsList" text="Errors list" />
+                                <MenuItem mnemonicParsing="false" onAction="#showSymbolsTable" text="Symbols table" />
                             </items>
                         </Menu>
                         <Menu mnemonicParsing="false" text="Help">
@@ -45,7 +46,7 @@
         </VBox>
     </top>
    <center>
-      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+      <TabPane minHeight="500.0" minWidth="400.0" prefHeight="200.0" prefWidth="400.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
         <tabs>
           <Tab text="Configuration Editor">
                <content>
@@ -59,13 +60,42 @@
             </Tab>
           <Tab text="Preview">
                <content>
-                  <BorderPane prefHeight="200.0" prefWidth="200.0" />
+                  <GridPane alignment="CENTER">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <VBox fx:id="noPreviewContainer" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                           <children>
+                              <Label styleClass="h1" text="There is no preview to show" textAlignment="CENTER" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </GridPane>
                </content>
           </Tab>
         </tabs>
       </TabPane>
    </center>
    <left>
-      <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="sidebar" BorderPane.alignment="CENTER" />
+      <VBox fx:id="sidebarContainer" alignment="TOP_CENTER" minWidth="250.0" prefHeight="200.0" prefWidth="200.0" styleClass="sidebar" BorderPane.alignment="CENTER">
+         <children>
+            <VBox fx:id="objectsContainer" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="row-xs-6">
+               <children>
+                  <Label text="Select an object" />
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets></VBox>
+            <VBox fx:id="noObjectsContainer" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="row-xs-6">
+               <children>
+                  <Label styleClass="h3" text="There're no objects to show" />
+               </children>
+            </VBox>
+         </children></VBox>
    </left>
 </BorderPane>
