@@ -5,7 +5,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.project.controllers.MainCtrl">
+<BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.project.controllers.MainCtrl">
     <stylesheets>
         <URL value="@css/styles.css" />
     </stylesheets>
@@ -16,20 +16,20 @@
                     <menus>
                         <Menu mnemonicParsing="false" text="File">
                             <items>
-                                <MenuItem mnemonicParsing="false" text="New" />
-                                <MenuItem mnemonicParsing="false" text="Open" />
-                                <MenuItem mnemonicParsing="false" text="Save" />
-                                <MenuItem mnemonicParsing="false" text="Save as" />
+                                <MenuItem mnemonicParsing="false" text="New" onAction="#newFile" />
+                                <MenuItem mnemonicParsing="false" text="Open" onAction="#openFile" />
+                                <MenuItem mnemonicParsing="false" text="Save" onAction="#saveFile"/>
+                                <MenuItem mnemonicParsing="false" text="Save as" onAction="#saveFileAs"/>
                                 <MenuItem mnemonicParsing="false" onAction="#closeApp" text="Close" />
                             </items>
                         </Menu>
                         <Menu mnemonicParsing="false" text="Execute">
                             <items>
-                                <MenuItem mnemonicParsing="false" text="Execute configuration file" />
-                                <MenuItem mnemonicParsing="false" text="Execute download scenario file" />
-                                <MenuItem mnemonicParsing="false" text="Execute game" />
-                                <MenuItem mnemonicParsing="false" text="Errors list" />
-                                <MenuItem mnemonicParsing="false" text="Symbol table" />
+                                <MenuItem mnemonicParsing="false" text="Execute configuration file" onAction="#loadConfigFile"/>
+                                <MenuItem mnemonicParsing="false" text="Execute structure file" onAction="#loadStructureFile" />
+                                <MenuItem mnemonicParsing="false" text="Execute game"  onAction="#executeGame"/>
+                                <MenuItem mnemonicParsing="false" text="Errors list" onAction="#showErrorsList"/>
+                                <MenuItem mnemonicParsing="false" text="Symbols table" onAction="#showSymbolsTable"/>
                             </items>
                         </Menu>
                         <Menu mnemonicParsing="false" text="Help">

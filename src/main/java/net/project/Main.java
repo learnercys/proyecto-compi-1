@@ -4,7 +4,6 @@ import java.net.URL;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import net.project.controllers.MainCtrl;
 
@@ -37,6 +36,7 @@ public class Main extends Application {
             mainCtrl.closeApp();
         });
 
+        primaryStage.setMaximized(true);
         primaryStage.show();
     }
 

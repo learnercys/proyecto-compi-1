@@ -22,6 +22,28 @@ public abstract class AbstractArea extends CodeArea {
         }
     }
 
+    /**
+     * Indicate if the current area code is saved or not.
+     *
+     * When is saved?
+     * 1.   if the current code area does not have some text and the file is null.
+     *      Nothing exist, so we don't need to save.
+     *
+     * 2.   if the current code area have some text and this text is the same to the
+     *      current file.
+     *
+     * @return really?
+     */
+    public boolean isSaved ()  {
+        try {
+            return this.getText().trim().length() == 0 && this.file == null
+                    || this.getText().equals( this.file.read() );
+
+        } catch ( NullPointerException ex) {
+            return false;
+        }
+    }
+
     @Override
     public void replaceText(int start, int end, String replace) {
         super.replaceText(start, end, replace);
