@@ -45,5 +45,55 @@ Una vez instalado gradle se ejecutará el comando **gradle build** que descargar
 Más simple con [Intellij Idea](https://www.jetbrains.com/idea/). Se abre el proyecto y se indica que se desea contruir el proyecto con la configuración de un proyecto gradle. Esto instala dependencias y genera el ejecutable.
 
 
+### Analizadores Léxicos
+##### Estructura
+
+La estructura empleada para la construcción de los analizadores léxicos es la siguiente:
+
+- Sección de Cabecera:
+```java
+package net.project.lexer.package;
+import java_cup.runtime.Symbol;
+import net.project.parser.packane.sym;
+```
+
+- Sección de Macros:
+```jflex
+%public
+%class PackageLexer
+%unicode
+%line
+%column
+%cupsym sym
+%cup
+```
+
+- Código incluido en la clase generada por jflex:
+```java
+private Symbol symbol( int type ) {
+	return new Symbol( type, yyline, yycolumn);
+}
+private Symbol symbol( int type, Object value ) {
+    return  new Symbol( type, yyline, yycolumn, value );
+}
+```
+
+- Carácteres sin significado:
+En esta sección se agregan todos los caracteres que pertenecen al lenguaje pero que carecen de significado dentro del mismo.
+
+- Carácteres con significado:
+En esta sección se agregan todos los carácteres que pertencen al lenguaje y que tienen significado.
+
+- Nombre del tag:
+Contiene todos los nombre de los tags
+
+- Palabras:
+Todas las palabras que pertenecen al lenguaje y que solas poseen un significado dentro del mismo.
+
+- Tags principales:
+Son todos los tags presentes en el lenguaje.
+
+- Reglas:
+Todas las reglas dentro del lenguaje.
 
 
