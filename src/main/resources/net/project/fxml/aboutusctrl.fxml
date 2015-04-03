@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane fx:id="aboutUsRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.project.controllers.AboutUsCtrl">
+    <stylesheets>
+        <URL value="@css/styles.css" />
+    </stylesheets>
+    <top>
+        <VBox alignment="CENTER" BorderPane.alignment="CENTER">
+            <children>
+                <Label text="GameSolutions" />
+            </children>
+         <styleClass>
+            <String fx:value="h1" />
+            <String fx:value="header" />
+         </styleClass>
+        </VBox>
+    </top>
+    <center>
+
+    </center>
+   <center>
+      <TextArea editable="false" prefHeight="200.0" prefWidth="200.0" text="Product Version&#10;JavaFX Scene Builder 2.0&#10;&#10;Build Information&#10;Version: 2.0-b20, Changeset: 5cac093e5c1f&#10;Date: 2014-03-21 09:30&#10;&#10;Logging&#10;The default configuration stores logging output in a file named scenebuilder-2.0.log (possibly followed by a trailing '.' and a digit).&#10;The default file path is /tmp/scenebuilder-2.0.log&#10;&#10;JavaFX&#10;Toolkit = QuantumToolkit&#10;Pipeline = SWPipeline&#10;Hardware acceleration DISABLED&#10;&#10;Java&#10;1.8.0-b132, Oracle Corporation&#10;&#10;Operating System&#10;Linux, amd64, 3.16.0-33-generic&#10;&#10;Copyright © 2012, 2014, Oracle and/or its affiliates. All rights reserved.&#10;&#10;This software and related documentation are provided under a license agreement containing restrictions on use and disclosure and are protected by intellectual property laws. Except as expressly permitted in your license agreement or allowed by law, you may not use, copy, reproduce, translate, broadcast, modify, license, transmit, distribute, exhibit, perform, publish, or display any part, in any form, or by any means. Reverse engineering, disassembly, or decompilation of this software, unless required by law for interoperability, is prohibited.&#10;&#10;The information contained herein is subject to change without notice and is not warranted to be error-free. If you find any errors, please report them to us in writing.&#10;&#10;If this software or related documentation is delivered to the U.S. Government or anyone licensing it on behalf of the U.S. Government, the following notice is applicable:&#10;&#10;U.S. GOVERNMENT RIGHTS Programs, software, databases, and related documentation and technical data delivered to U.S. Government customers are &quot;commercial computer software&quot; or &quot;commercial technical data&quot; pursuant to the applicable Federal Acquisition Regulation and agency-specific supplemental regulations. As such, the use, duplication, disclosure, modification, and adaptation shall be subject to the restrictions and license terms set forth in the applicable Government contract, and, to the extent applicable by the terms of the Government contract, the additional rights set forth in FAR 52.227-19, Commercial Computer Software License (December 2007). Oracle USA, Inc., 500 Oracle Parkway, Redwood City, CA 94065.&#10;&#10;This software is developed for general use in a variety of information management applications. It is not developed or intended for use in any inherently dangerous applications, including applications which may create a risk of personal injury. If you use this software in dangerous applications, then you shall be responsible to take all appropriate fail-safe, backup, redundancy, and other measures to ensure the safe use of this software. Oracle and its affiliates disclaim any liability for any damages caused by use of this software in dangerous applications.&#10;&#10;Oracle is a registered trademark of Oracle and/or its affiliates. Other names may be trademarks of their respective owners.&#10;&#10;This software and documentation may provide access to or information on content, products, and services from third parties. Oracle and its affiliates are not responsible for and expressly disclaim all warranties of any kind with respect to third-party content, products, and services. Oracle and its affiliates will not be responsible for any loss, costs, or damages incurred due to your access to or use of third-party content, products, or services." wrapText="true" BorderPane.alignment="CENTER" />
+   </center>
+</BorderPane>

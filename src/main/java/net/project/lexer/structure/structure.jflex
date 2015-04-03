@@ -70,7 +70,7 @@ xCredit         = "x-creditos"
 
 
 // ER
-id          = [a-z][a-z0-9_]+
+id          = [a-zA-Z][a-za-Z0-9_]+
 intValue    = [:digit:]+
 path        = {dQuote} {iPath} {dQuote}
 stringValue      = {dQuote} {iString} {dQuote}

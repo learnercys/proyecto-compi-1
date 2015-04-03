@@ -53,7 +53,7 @@ height          = "alto"
 width           = "ancho"
 
 // ER
-id              = [a-zA-Z][a-za-Z0-9]+
+id              = [a-zA-Z][a-za-Z0-9_]+
 intValue        = [:digit:]+
 
 // main tags
