@@ -16,12 +16,14 @@ public class Main extends Application {
     public static final String APP_TITLE = "Game solution";
     public static URL appBase;
     public static String appFXML;
+    public static String appHTML;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         // defining base route.
         appBase = getClass().getResource("");
         appFXML = getClass().getResource("fxml").toString();
+        appHTML = getClass().getResource("html").toString();
 
         Pane root = FXMLLoader.load( new URL( appFXML + "/mainctrl.fxml") );
         primaryStage.setTitle( APP_TITLE );

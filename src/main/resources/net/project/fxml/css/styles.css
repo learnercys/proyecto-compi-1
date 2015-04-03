@@ -9,9 +9,6 @@
     -fx-padding: 15px;
 }
 
-TextArea {
-    -fx-padding: 15px;
-}
 .text-center {
     -fx-text-alignment: center;
 }

@@ -126,7 +126,7 @@ Todas las producciones terminales presentes en la estructura.
 ```
 	// main tags
 
-	// signle chars
+	// single chars
 
     // single words
 
