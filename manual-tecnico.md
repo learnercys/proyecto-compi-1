@@ -96,4 +96,44 @@ Son todos los tags presentes en el lenguaje.
 - Reglas:
 Todas las reglas dentro del lenguaje.
 
+### Analizadores Sintácticos
 
+La estructura empleada para la construcción de los analizadores sintácticos es la siguiente:
+
+- Cabecera:
+```java
+    package net.project.parser.package;
+    import java_cup.runtime.Symbol;
+```
+
+- Código de usuario:
+En ambos analizadores se generan las mismas instrucciones para indentificar errores presentes en el análisis.
+```java
+    public boolean hasUnRecoveredSyntaxError = false;
+
+    public void syntax_error( Symbol currentToken ) {
+        // just to avoid native syntax_error method.
+    }
+
+    public void unrecovered_syntax_error( Symbol s ) throws java.lang.Exception {
+        // has an un-recovered syntax error(structure error)
+        this.hasUnRecoveredSyntaxError = true;
+    }
+```
+
+- Terminales:
+Todas las producciones terminales presentes en la estructura.
+```
+	// main tags
+
+	// signle chars
+
+    // single words
+
+    // Regular Expressions
+```
+
+- No terminales:
+Todas las producciones no terminales presentes en la estructura.
+
+- Producciones
