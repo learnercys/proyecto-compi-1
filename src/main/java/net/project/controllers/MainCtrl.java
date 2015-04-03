@@ -35,7 +35,7 @@ public class MainCtrl implements Initializable{
     @FXML private VBox objectsContainer;
     @FXML private VBox noPreviewContainer;
 
-    private BooleanProperty objectsInSidebar = new SimpleBooleanProperty(false);
+    private BooleanProperty isSidebarOK = new SimpleBooleanProperty(false);
     private BooleanProperty isPreviewOK = new SimpleBooleanProperty(false);
     private StructureArea sArea;
     private ConfigArea cArea;
@@ -76,7 +76,7 @@ public class MainCtrl implements Initializable{
      */
     public void loadConfigFile () {
         cArea.doCompilation();
-        objectsInSidebar.setValue(!cArea.hasErrors());
+        isSidebarOK.setValue(!cArea.hasErrors());
     }
 
     /**
@@ -84,13 +84,27 @@ public class MainCtrl implements Initializable{
      */
     public void loadStructureFile ( ) {
         sArea.doCompilation();
+        isPreviewOK.setValue(!sArea.hasErrors());
     }
 
     /**
      * TODO create a new File
      */
     public void newFile( ) {
+        switch ( typeOfFile() ) {
+            case FileType.CONFIG:
+                cArea.resetArea();
+                isSidebarOK.setValue(false);
 
+            case FileType.STR:
+                sArea.resetArea();
+                isPreviewOK.setValue(false);
+                break;
+
+            default:
+                // error type, nothing to do.
+                break;
+        }
     }
 
     public void openAboutUs( ) throws Exception{
@@ -203,10 +217,10 @@ public class MainCtrl implements Initializable{
 
         // sidebar
         noObjectsContainer.managedProperty().bind(noObjectsContainer.visibleProperty());
-        noObjectsContainer.visibleProperty().bind(objectsInSidebar.not());
+        noObjectsContainer.visibleProperty().bind(isSidebarOK.not());
 
         objectsContainer.managedProperty().bind(objectsContainer.visibleProperty());
-        objectsContainer.visibleProperty().bind(objectsInSidebar);
+        objectsContainer.visibleProperty().bind(isSidebarOK);
 
         // preview
         noPreviewContainer.managedProperty().bind(noPreviewContainer.visibleProperty());

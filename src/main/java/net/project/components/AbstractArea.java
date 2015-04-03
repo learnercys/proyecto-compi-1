@@ -44,6 +44,10 @@ public abstract class AbstractArea extends CodeArea {
         }
     }
 
+    public void removeText( ) {
+        replaceText("");
+    }
+
     @Override
     public void replaceText(int start, int end, String replace) {
         super.replaceText(start, end, replace);
@@ -59,6 +63,10 @@ public abstract class AbstractArea extends CodeArea {
     }
 
     abstract void doCompilation();
+
+    abstract void resetArea();
+
+    abstract void resetSymbols();
 
     abstract boolean hasErrors();
 

@@ -13,6 +13,17 @@ public class StructureArea extends AbstractArea {
 
     }
 
+    public void resetArea ( ) {
+        resetSymbols();
+        removeText();
+    }
+
+    /**
+     * TODO reset symbols
+     */
+    public void resetSymbols() {
+
+    }
     /**
      * TODO verify if the current area has errors
      *
