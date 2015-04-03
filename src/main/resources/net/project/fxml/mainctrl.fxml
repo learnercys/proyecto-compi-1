@@ -48,19 +48,19 @@
       <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
         <tabs>
           <Tab text="Configuration Editor">
-            <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-            </content>
+               <content>
+                  <BorderPane fx:id="cAreaContainer" prefHeight="200.0" prefWidth="200.0" />
+               </content>
           </Tab>
             <Tab text="Structure Editor">
-              <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-              </content>
+               <content>
+                  <BorderPane fx:id="sAreaContainer" prefHeight="200.0" prefWidth="200.0" />
+               </content>
             </Tab>
           <Tab text="Preview">
-            <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-            </content>
+               <content>
+                  <BorderPane prefHeight="200.0" prefWidth="200.0" />
+               </content>
           </Tab>
         </tabs>
       </TabPane>

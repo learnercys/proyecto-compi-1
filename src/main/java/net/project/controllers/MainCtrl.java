@@ -10,8 +10,10 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.stage.Window;
 import net.project.Main;
-
+import net.project.components.ConfigArea;
+import net.project.components.StructureArea;
 
 
 /**
@@ -20,6 +22,11 @@ import net.project.Main;
 public class MainCtrl implements Initializable{
 
     @FXML private BorderPane root;
+    @FXML private BorderPane cAreaContainer;
+    @FXML private BorderPane sAreaContainer;
+
+    private StructureArea sArea;
+    private ConfigArea cArea;
 
     public void closeApp( ) {
         Stage stage = (Stage)root.getScene().getWindow();
@@ -54,7 +61,7 @@ public class MainCtrl implements Initializable{
         Stage manual = new Stage(StageStyle.DECORATED);
         FXMLLoader loader = new FXMLLoader( new URL( Main.appFXML + "/manualctrl.fxml") );
 
-        manual.setScene(new Scene((BorderPane)loader.load()));
+        manual.setScene(new Scene(loader.load()));
 
         ManualCtrl manualCtrl = loader.getController();
         manualCtrl.initData( type );
@@ -63,6 +70,14 @@ public class MainCtrl implements Initializable{
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+        // injecting configuration area.
+        cArea = new ConfigArea();
+        cAreaContainer.setCenter(cArea);
+
+        // injecting structure area.
+        sArea = new StructureArea();
+        sAreaContainer.setCenter(sArea);
 
     }
 }

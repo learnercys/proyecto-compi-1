@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import net.project.controllers.MainCtrl;
 
 /**
  * @author learnercys (learner.cys@gmail.com)
@@ -25,9 +26,17 @@ public class Main extends Application {
         appFXML = getClass().getResource("fxml").toString();
         appHTML = getClass().getResource("html").toString();
 
-        Pane root = FXMLLoader.load( new URL( appFXML + "/mainctrl.fxml") );
+        FXMLLoader loader = new FXMLLoader( new URL( appFXML + "/mainctrl.fxml"));
+
         primaryStage.setTitle( APP_TITLE );
-        primaryStage.setScene( new Scene( root ) );
+        primaryStage.setScene( new Scene( loader.load() ) );
+
+        // close listener
+        primaryStage.setOnCloseRequest((e)-> {
+            MainCtrl mainCtrl = loader.getController();
+            mainCtrl.closeApp();
+        });
+
         primaryStage.show();
     }
 
