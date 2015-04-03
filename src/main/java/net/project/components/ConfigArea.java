@@ -5,4 +5,10 @@ package net.project.components;
  * Created on 3/04/15.
  */
 public class ConfigArea extends AbstractArea {
+    /**
+     * TODO do compilation to configuration area.
+     */
+    public void doCompilation ( ) {
+
+    }
 }

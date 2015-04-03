@@ -58,4 +58,6 @@ public abstract class AbstractArea extends CodeArea {
         this.replaceText(file.read());
     }
 
+    abstract void doCompilation();
+
 }

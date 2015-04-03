@@ -138,4 +138,17 @@ Todas las producciones no terminales presentes en la estructura.
 
 - Producciones
 
+### Estructura del proyecto
+- **src**
+    - *main*
+    	- java.net.project
+    		- components: Todos los componentes de la aplicación(RichTextBoxs).
+            - controllers: Manejadores de eventos para las estructuras principales.
+            - lexer: analizadores léxicos de la herramienta.
+            - parser: analizadores sintácticos de la herramienta.
+            - utils: librerías utilizadas para un manejo más eficiente de los inputs y outputs.
+    	- resources.net.project
+    		+ fxml: Es este paquete se almacenan todas las estructuras para las ventan.as
+
+    - *test*: Área donde se crean los unit testing files.
 

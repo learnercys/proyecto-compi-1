@@ -1,6 +1,5 @@
 package net.project.controllers;
 
-import java.io.File;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -68,14 +67,14 @@ public class MainCtrl implements Initializable{
      * TODO load the configuration file
      */
     public void loadConfigFile () {
-
+        cArea.doCompilation();
     }
 
     /**
      * TODO load the structure file.
      */
     public void loadStructureFile ( ) {
-
+        sArea.doCompilation();
     }
 
     /**
