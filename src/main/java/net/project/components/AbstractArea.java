@@ -53,4 +53,9 @@ public abstract class AbstractArea extends CodeArea {
         this.replaceText(0, this.getLength(), replace);
     }
 
+    public void setFile ( CFile file ) {
+        this.file = file;
+        this.replaceText(file.read());
+    }
+
 }

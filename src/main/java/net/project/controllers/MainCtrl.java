@@ -1,6 +1,6 @@
 package net.project.controllers;
 
-import java.awt.*;
+import java.io.File;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -18,6 +18,7 @@ import javafx.stage.StageStyle;
 import net.project.Main;
 import net.project.components.ConfigArea;
 import net.project.components.StructureArea;
+import net.project.utils.CFile;
 
 
 /**
@@ -31,6 +32,25 @@ public class MainCtrl implements Initializable{
 
     private StructureArea sArea;
     private ConfigArea cArea;
+
+    private int typeOfFile ( ) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Open file");
+        alert.setContentText("File type?");
+
+        ButtonType configButton = new ButtonType("Config");
+        ButtonType structureButton = new ButtonType("Structure");
+        ButtonType cancelButton = new ButtonType("Cancel");
+
+        alert.getButtonTypes().setAll(configButton, structureButton, cancelButton);
+
+        Optional<ButtonType> result = alert.showAndWait();
+
+
+        return result.get() == configButton ?
+                FileType.CONFIG : result.get() == structureButton ?
+                FileType.STR : FileType.ERROR;
+    }
 
     public void closeApp( ) {
         Stage stage = (Stage)root.getScene().getWindow();
@@ -90,32 +110,30 @@ public class MainCtrl implements Initializable{
     }
 
     public void openFile ( ) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Open file");
-        alert.setContentText("File type?");
+        int fileType = typeOfFile();
+        if( fileType != FileType.ERROR ) {
+            FileChooser fileChooser = new FileChooser();
 
-        ButtonType configButton = new ButtonType("Configuration");
-        ButtonType structureButton = new ButtonType("Structure");
-        ButtonType cancelButton = new ButtonType("Cancel");
+            fileChooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("xconf files", "*.xconf")
+            );
 
-        alert.getButtonTypes().setAll(configButton, structureButton, cancelButton);
+            try {
+                CFile cFile = new CFile( fileChooser.showOpenDialog(root.getScene().getWindow()));
 
-        Optional<ButtonType> result = alert.showAndWait();
-        String type;
-        if(result.get() == configButton) {
-            // configuration file
-            System.out.println("hola");
-        } else if ( result.get() == structureButton ) {
-            // structure file
-            System.out.println("dos");
-        } else {
-            return;
+                if(cFile.canRead()) {
+                    if ( fileType == FileType.CONFIG) {
+                        // configuration file
+                        cArea.setFile(cFile);
+                    } else if( fileType == FileType.STR ) {
+                        // structure file
+                        sArea.setFile(cFile);
+                    }
+                }
+            } catch ( NullPointerException e ) {
+                // something horrible happen, is not my fault.
+            }
         }
-
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("xconf files", "*.xconf")
-        );
     }
 
     /**
@@ -132,6 +150,13 @@ public class MainCtrl implements Initializable{
 
     }
 
+    /**
+     * init the manual window
+     *
+     * @param type Indicate what will be show in the window.
+     *
+     * @throws Exception to load the 'fxml' file.
+     */
     public void startManual ( int type ) throws Exception{
         Stage manual = new Stage(StageStyle.DECORATED);
         FXMLLoader loader = new FXMLLoader( new URL( Main.appFXML + "/manualctrl.fxml") );
@@ -168,6 +193,12 @@ public class MainCtrl implements Initializable{
         sArea = new StructureArea();
         sAreaContainer.setCenter(sArea);
 
+    }
+
+    private interface FileType {
+        public static final int ERROR = 0;
+        public static final int CONFIG = 1;
+        public static final int STR = 2;
     }
 }
 
