@@ -2,7 +2,6 @@ package net.project.lexer.configuration;
 
 import java_cup.runtime.Symbol;
 import net.project.parser.configuration.sym;
-import net.project.parser.configuration.
 
 %%
 
@@ -11,12 +10,14 @@ import net.project.parser.configuration.
 %unicode
 %line
 %column
-%ignorecase
 %cupsym sym
 %cup
 
 %{
     private Symbol symbol( int type ) {
+        System.out.print("type: " + type);
+        System.out.print(", yyline: " + yyline );
+        System.out.println(", yycolumn: " + yycolumn );
         return new Symbol( type, yyline, yycolumn );
     }
 
@@ -32,8 +33,7 @@ lessThan    = "<"
 lessThanS   = "</"
 dQuote      = [\"]
 iString     = [^\"]+
-// is not a single char i'm sorry =D.
-iPath       = ([\/][^/]+)+
+
 whiteSpace  = [ \n\t\f]
 
 // single chars with meaning
@@ -65,15 +65,14 @@ xDescription    = "x-descripcion"
 xFinish         = "x-meta"
 xBlock          = "x-bloque"
 xBonus          = "x-bonus"
-xBomb           = "x-bomb"
+xBomb           = "x-bomba"
 xWeapon         = "x-arma"
 xCredit         = "x-creditos"
 
 
 // ER
-id          = [a-zA-Z][a-za-Z0-9_]+
+id          = [a-zA-Z][a-zA-Z0-9_]+
 intValue    = [:digit:]+
-path        = {dQuote} {iPath} {dQuote}
 stringValue      = {dQuote} {iString} {dQuote}
 
 // main tags
@@ -99,7 +98,7 @@ endDesign           = {lessThanS} {swDesign} {moreThan}
 {endConfiguration}  { return symbol( sym.end_configuration ); }
 
 {initBackground}    { return symbol( sym.init_background ); }
-{endBackground}     { return symbol( sym.end_configuration ); }
+{endBackground}     { return symbol( sym.end_background ); }
 
 {initFigure}        { return symbol( sym.init_figure ); }
 {endFigure}         { return symbol( sym.end_figure ); }
@@ -133,9 +132,8 @@ endDesign           = {lessThanS} {swDesign} {moreThan}
 
 // ER
 {id}                { return symbol( sym.id ); }
-{path}              { return symbol( sym.path ); }
 {intValue}          { return symbol( sym.int_value ); }
-{stringValue}            { return symbol( sym.string_value ); }
+{stringValue}       { return symbol( sym.string_value ); }
 
 // ignore white spaces.
 

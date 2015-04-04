@@ -36,7 +36,7 @@ public class Main extends Application {
             mainCtrl.closeApp();
         });
 
-        primaryStage.setMaximized(true);
+        //primaryStage.setMaximized(true);
         primaryStage.show();
     }
 

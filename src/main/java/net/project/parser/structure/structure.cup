@@ -101,6 +101,8 @@ non terminal
 
     FINISH;
 
+start with START;
+
 /*
  * <x-escenario attrs > /elements/ </x-escenario>
  */
