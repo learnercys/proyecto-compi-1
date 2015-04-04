@@ -1,6 +1,8 @@
 package net.project.lexer.configuration;
 
 import java_cup.runtime.Symbol;
+import java.util.ArrayList;
+import java.util.HashMap;
 import net.project.parser.configuration.sym;
 
 %%
@@ -14,10 +16,14 @@ import net.project.parser.configuration.sym;
 %cup
 
 %{
+
+    public boolean hasErrors () {
+        return errors.size() != 0;
+    }
+
+    public ArrayList<HashMap<String, String>> errors = new ArrayList<>();
+
     private Symbol symbol( int type ) {
-        System.out.print("type: " + type);
-        System.out.print(", yyline: " + yyline );
-        System.out.println(", yycolumn: " + yycolumn );
         return new Symbol( type, yyline, yycolumn );
     }
 
@@ -33,7 +39,6 @@ lessThan    = "<"
 lessThanS   = "</"
 dQuote      = [\"]
 iString     = [^\"]+
-
 whiteSpace  = [ \n\t\f]
 
 // single chars with meaning
@@ -131,9 +136,9 @@ endDesign           = {lessThanS} {swDesign} {moreThan}
 {semicolon}         { return symbol( sym.semicolon ); }
 
 // ER
-{id}                { return symbol( sym.id ); }
-{intValue}          { return symbol( sym.int_value ); }
-{stringValue}       { return symbol( sym.string_value ); }
+{id}                { return symbol( sym.id, yytext() ); }
+{intValue}          { return symbol( sym.int_value, yytext() ); }
+{stringValue}       { return symbol( sym.string_value, yytext() ); }
 
 // ignore white spaces.
 
@@ -143,4 +148,10 @@ endDesign           = {lessThanS} {swDesign} {moreThan}
 
 . {
     System.out.println("Line: " + (yyline+1) + " Column: " + (yycolumn+1) + " - Lexical error in: " + yytext());
+    HashMap<String, String> error = new HashMap<>();
+    error.put("line", Integer.toString(yyline + 1));
+    error.put("column", Integer.toString(yycolumn +1));
+    error.put("text", yytext());
+    error.put("number", Integer.toString(errors.size() + 1));
+    errors.add( error );
 }

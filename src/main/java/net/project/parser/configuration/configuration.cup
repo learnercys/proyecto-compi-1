@@ -1,6 +1,8 @@
 package net.project.parser.configuration;
 
 import java_cup.runtime.Symbol;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /*
  * Code inserted in StructureParser
@@ -9,6 +11,21 @@ parser code
 {:
 	public boolean hasUnRecoveredSyntaxError = false;
 
+    public ArrayList<HashMap<String,String>> backgrounds = new ArrayList<>();
+    public ArrayList<HashMap<String,String>> figures = new ArrayList<>();
+    public ArrayList<HashMap<String,String>> designs = new ArrayList<>();
+
+    public ArrayList<HashMap<String,String>> errors = new ArrayList<>();
+
+    public String currentName;
+    public String currentPicture;
+    public String currentType;
+
+    public String currentLive;
+    public String currentDestroy;
+    public String currentDescription;
+    public String currentCredit;
+
 	public void syntax_error(Symbol cur_token) {
 		// nothing to do, just to avoid native syntax_error method.
 	}
@@ -16,9 +33,6 @@ parser code
 	public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception {
 		// has some un-recovered syntax error(structure error)
 		this.hasUnRecoveredSyntaxError = true;
-        System.out.print("s: " + s.sym);
-        System.out.print(", yyline: " + s.left );
-        System.out.println(", yycolumn: " + s.right );
 	}
 :}
 
@@ -130,14 +144,25 @@ BG_IN::=	BG_OBJECT
 BG_OBJECT::= open_brace BG_ELEMENTS close_brace;
 
 BG_ELEMENTS::=  BG_ELEMENT semicolon
-                | BG_ELEMENTS BG_ELEMENT semicolon;
+                | BG_ELEMENTS BG_ELEMENT semicolon{:
+                    if( this.parser.currentName != null && this.parser.currentPicture != null ) {
+                        // background will be added.
+                        HashMap<String,String> bg = new HashMap<>();
+                        bg.put("name", this.parser.currentName);
+                        bg.put("picture", this.parser.currentPicture);
+                        this.parser.backgrounds.add(bg);
+                    }
+
+                    this.parser.currentName = null;
+                    this.parser.currentPicture = null;
+                :};
 
 BG_ELEMENT::=   BG_X_NAME
                 | BG_X_PICTURE;
 
-BG_X_NAME::= x_name equal id;
+BG_X_NAME::= x_name equal id:id{:this.parser.currentName = id;:};
 
-BG_X_PICTURE::= x_picture equal string_value;
+BG_X_PICTURE::= x_picture equal string_value:picture{: this.parser.currentPicture = picture; :};
 
 
  /*
@@ -151,7 +176,45 @@ FG_IN::=    FG_OBJECT
 FG_OBJECT::= open_brace FG_ELEMENTS close_brace;
 
 FG_ELEMENTS::=  FG_ELEMENT semicolon
-                | FG_ELEMENTS FG_ELEMENT semicolon;
+                | FG_ELEMENTS FG_ELEMENT semicolon{:
+
+                    HashMap<String,String> figure = new HashMap<>();
+
+                    figure.put("name", this.parser.currentName);
+
+                    figure.put("picture", this.parser.currentPicture);
+
+                    figure.put("type", this.parser.currentType);
+
+                    // set live
+                    if( this.parser.currentLive == null ) {
+                        figure.put("live", "100");
+                    }
+
+                    int live = Integer.parseInt(this.parser.currentLive);
+                    if( live < 0 || live > 100) { live = 100;}
+
+                    figure.put("live", Integer.toString(live));
+
+
+                    if( this.parser.currentDestroy != null && this.parser.currentType == "enemy") {
+                        figure.put("destroy", this.parser.currentDestroy);
+                    }
+
+                    if( this.parser.currentDescription == null) {
+                        figure.put("description", "No description");
+                    } else {
+                        figure.put("description", this.parser.currentDescription);
+                    }
+
+                    this.parser.figures.add(figure);
+                    this.parser.currentName = null;
+                    this.parser.currentPicture = null;
+                    this.parser.currentType = null;
+                    this.parser.currentLive = null;
+                    this.parser.currentDestroy = null;
+                    this.parser.currentDescription = null;
+                :};
 
 FG_ELEMENT::=   FG_X_NAME
 				| FG_X_PICTURE
@@ -161,20 +224,20 @@ FG_ELEMENT::=   FG_X_NAME
                 | FG_X_DESCRIPTION
                 ;
 
-FG_X_NAME::= x_name equal id;
+FG_X_NAME::= x_name equal id:name{: this.parser.currentName = name; :};
 
-FG_X_PICTURE::= x_picture equal string_value;
+FG_X_PICTURE::= x_picture equal string_value:picture{: this.parser.currentPicture = picture; :};
 
 FG_X_TYPE::=    x_type equal FG_X_TYPE_VALUE;
 
-FG_X_TYPE_VALUE::=  x_hero
-                    | x_enemy;
+FG_X_TYPE_VALUE::=  x_hero{: this.parser.currentType = "hero"; :}
+                    | x_enemy{: this.parser.currentType = "enemy"; :};
 
-FG_X_LIVE::= x_live equal int_value;
+FG_X_LIVE::= x_live equal int_value:val{: this.parser.currentLive = val; :};
 
-FG_X_DESTROY::= x_destroy equal int_value;
+FG_X_DESTROY::= x_destroy equal int_value:val{: this.parser.currentDestroy = val; :};
 
-FG_X_DESCRIPTION::= x_description equal string_value;
+FG_X_DESCRIPTION::= x_description equal string_value:description{: this.parser.currentDescription = description; :};
 
 
 /*
@@ -192,7 +255,38 @@ DG_OBJECT::= open_brace DG_ELEMENTS close_brace;
 
 // element (; element)*
 DG_ELEMENTS::= DG_ELEMENT semicolon
-                | DG_ELEMENTS DG_ELEMENT semicolon;
+                | DG_ELEMENTS DG_ELEMENT semicolon{:
+                    HashMap<String, String> design = new HashMap<>();
+                    design.put("name", this.parser.currentName);
+                    design.put("type", this.parser.currentType);
+                    design.put("picture", this.parser.currentPicture);
+
+                    if( this.parser.currentType == "weapon" || this.parser.currentType == "bomb") {
+                        // add destroy only if is a weapon or is a bomb
+                        int destroy = Integer.parseInt(this.parser.currentDestroy);
+
+                        if( destroy % 10 != 0) {
+                            this.parser.currentDestroy = "10";
+                        }
+
+                        design.put("destroy", this.parser.currentDestroy);
+                    }
+
+                    if( this.parser.currentType == "bonus" ) {
+                        if( this.parser.currentCredit == null ) {
+                            this.parser.currentCredit = "10";
+                        }
+                        design.put("credit", this.parser.currentCredit);
+                    }
+
+                    this.parser.designs.add(design);
+
+                    this.parser.currentName = null;
+                    this.parser.currentType = null;
+                    this.parser.currentPicture = null;
+                    this.parser.currentDestroy = null;
+                    this.parser.currentCredit = null;
+                :};
 
 DG_ELEMENT::=   DG_X_NAME
                 | DG_X_TYPE
@@ -200,19 +294,19 @@ DG_ELEMENT::=   DG_X_NAME
                 | DG_X_DESTROY
                 | DG_X_CREDIT;
 
-DG_X_NAME::= x_name equal id;
+DG_X_NAME::= x_name equal id:name{: this.parser.currentName = name; :};
 
 DG_X_TYPE::= x_type:type equal DG_X_TYPE_VALUE;
 
-DG_X_TYPE_VALUE::=  x_finish
-                    | x_block
-                    | x_bonus
-                    | x_bomb
-                    | x_weapon;
+DG_X_TYPE_VALUE::=  x_finish{: this.parser.currentType = "finish"; :}
+                    | x_block{: this.parser.currentType = "block"; :}
+                    | x_bonus{: this.parser.currentType = "bonus"; :}
+                    | x_bomb{: this.parser.currentType = "bomb"; :}
+                    | x_weapon{:this.parser.currentType = "weapon"; :};
 
-DG_X_PICTURE::= x_picture equal string_value;
+DG_X_PICTURE::= x_picture equal string_value:picture{: this.parser.currentPicture = picture; :};
 
-DG_X_DESTROY::= x_destroy equal int_value;
+DG_X_DESTROY::= x_destroy equal int_value:destroy{: this.parser.currentDestroy = destroy; :};
 
-DG_X_CREDIT::= x_credit equal int_value;
+DG_X_CREDIT::= x_credit equal int_value:credit{: this.parser.currentCredit = credit; :};
 
