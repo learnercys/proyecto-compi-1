@@ -1,5 +1,6 @@
 package net.project.controllers;
 
+import java.io.File;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -162,14 +163,75 @@ public class MainCtrl implements Initializable{
      * TODO save the current file as a new file( or replace for another).
      */
     public void saveFileAs( ) {
+        // and stupid trick
+        saveFileAs(FileType.NO_TYPE);
+    }
 
+    public void saveFileAs( int type ) {
+        if( type == FileType.NO_TYPE) {
+            // only happen when is coming from saveFileAs() method.
+            saveFileAs(typeOfFile());
+        } else if( type != FileType.ERROR ) {
+            // if the type is different to ERROR
+            FileChooser fileS = new FileChooser();
+            fileS.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("xconf files", "*.xconf")
+            );
+
+            File file = fileS.showSaveDialog(root.getScene().getWindow());
+
+            // if the file is null the user put the cancel button or close the window.
+            if( file != null ) {
+                if( CFile.getExtension(file) == null || !CFile.getExtension(file).equals("xconf")  ) {
+                    // in case the file does not have extension or the extension is not correct
+                    // wee add the correct extension to the current file.
+                    file = new File(file.getAbsolutePath() + ".xconf");  // just in case
+                }
+                CFile cFile = new CFile(file);
+                switch (type) {
+                    case FileType.CONFIG:
+                        cFile.saveFile(cArea.getText());
+                        cArea.setFile(cFile);
+                        break;
+
+                    case FileType.STR:
+                        cFile.saveFile(sArea.getText());
+                        sArea.setFile(cFile);
+                        break;
+                }
+            }
+        }
     }
 
     /**
      * TODO save the current file.
      */
     public void saveFile( ) {
+        int type = typeOfFile();
+        switch (type) {
+            case FileType.CONFIG:
+                // saving the configuration file
 
+                // see if te current file already exist
+                if(cArea.getFile() == null) {
+                    saveFileAs(type);
+                } else {
+                    cArea.getFile().saveFile(cArea.getText());
+                }
+                break;
+            case FileType.STR:
+                // saving the 'structure' file
+
+                // see if the current file already exist
+                if(sArea.getFile() == null ) {
+                    saveFileAs(type);
+                } else {
+                    sArea.getFile().saveFile(sArea.getText());
+                }
+                break;
+            default:
+                // none
+        }
     }
 
     /**
@@ -229,6 +291,7 @@ public class MainCtrl implements Initializable{
     }
 
     private interface FileType {
+        public static final int NO_TYPE = -1;
         public static final int ERROR = 0;
         public static final int CONFIG = 1;
         public static final int STR = 2;

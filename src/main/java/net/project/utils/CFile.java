@@ -72,5 +72,11 @@ public class CFile extends File {
         }
     }
 
+    public static String getExtension( File file ) throws NullPointerException{
+        if( file.getName().lastIndexOf( "." ) < 0 ) {
+            return null;
+        }
+        return file.getName().substring( file.getName().lastIndexOf( "." ) + 1, file.getName().length() );
+    }
 
 }

@@ -15,7 +15,16 @@ public class StructureArea extends AbstractArea {
 
     public void resetArea ( ) {
         resetSymbols();
+        resetErrors();
         removeText();
+        setFile(null);
+    }
+
+    /**
+     * TODO reset errors
+     */
+    public void resetErrors() {
+
     }
 
     /**

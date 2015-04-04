@@ -59,12 +59,20 @@ public abstract class AbstractArea extends CodeArea {
 
     public void setFile ( CFile file ) {
         this.file = file;
-        this.replaceText(file.read());
+        if( file != null ) {
+            this.replaceText(file.read());
+        }
+    }
+
+    public CFile getFile ( ) {
+        return this.file;
     }
 
     abstract void doCompilation();
 
     abstract void resetArea();
+
+    abstract void resetErrors();
 
     abstract void resetSymbols();
 
