@@ -21,7 +21,7 @@ parser code
 :}
 
 /*
- *
+ * terminals?
  */
 
 terminal String

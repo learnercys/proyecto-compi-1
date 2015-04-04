@@ -77,6 +77,7 @@ public class MainCtrl implements Initializable{
      */
     public void loadConfigFile () {
         cArea.doCompilation();
+
         isSidebarOK.setValue(!cArea.hasErrors());
     }
 

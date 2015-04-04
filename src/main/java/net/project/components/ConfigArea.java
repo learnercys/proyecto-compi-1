@@ -12,6 +12,18 @@ import java.io.StringReader;
  */
 public class ConfigArea extends AbstractArea {
 
+    private ConfigurationLexer lexer;
+    private ConfigurationParser parser;
+
+    /**
+     * TODO verify if the current area has errors
+     * @return has errors?
+     */
+    public boolean hasErrors ( ) {
+
+        return lexer.hasErrors();
+    }
+
     /**
      * do compilation to configuration area.
      */
@@ -29,8 +41,8 @@ public class ConfigArea extends AbstractArea {
         }
 
         StringReader stringReader = new StringReader( this.getText() );
-        ConfigurationLexer lexer = new ConfigurationLexer(stringReader);
-        ConfigurationParser parser = new ConfigurationParser(lexer);
+        lexer = new ConfigurationLexer(stringReader);
+        parser = new ConfigurationParser(lexer);
 
         try {
             parser.parse();
@@ -64,11 +76,5 @@ public class ConfigArea extends AbstractArea {
 
     }
 
-    /**
-     * TODO verify if the current area has errors
-     * @return has errors?
-     */
-    public boolean hasErrors ( ) {
-        return false;
-    }
+
 }

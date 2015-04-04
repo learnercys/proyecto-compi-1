@@ -12,6 +12,19 @@ import java.io.StringReader;
  */
 public class StructureArea extends AbstractArea {
 
+    private StructureLexer lexer;
+    private StructureParser parser;
+
+    /**
+     * verify if the current area has errors
+     *
+     * @return has errors?
+     */
+    public boolean hasErrors ( ) {
+        return lexer.hasErrors();
+
+    }
+
     /**
      * do compilation to structure area.
      */
@@ -27,8 +40,8 @@ public class StructureArea extends AbstractArea {
         }
 
         StringReader stringReader = new StringReader( this.getText() );
-        StructureLexer lexer = new StructureLexer( stringReader );
-        StructureParser parser = new StructureParser( lexer );
+        lexer = new StructureLexer( stringReader );
+        parser = new StructureParser( lexer );
 
         try {
             parser.parse();
@@ -60,12 +73,5 @@ public class StructureArea extends AbstractArea {
     public void resetSymbols() {
 
     }
-    /**
-     * TODO verify if the current area has errors
-     *
-     * @return has errors?
-     */
-    public boolean hasErrors ( ) {
-        return false;
-    }
+
 }

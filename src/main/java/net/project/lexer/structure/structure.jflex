@@ -1,6 +1,8 @@
 package net.project.lexer.structure;
 
 import java_cup.runtime.Symbol;
+import java.util.ArrayList;
+import java.util.HashMap;
 import net.project.parser.structure.sym;
 
 
@@ -15,6 +17,10 @@ import net.project.parser.structure.sym;
 %cup
 
 %{
+    public boolean hasErrors() { return errors.size() != 0; }
+
+    public ArrayList<HashMap<String,String>> errors = new ArrayList<>();
+
     private Symbol symbol( int type ) {
         System.out.println("yytext(): " + yytext() );
         return new Symbol( type, yyline, yycolumn);
@@ -140,4 +146,10 @@ finish          = {lessThan} {xFinish} {moreThan}
 
 . {
     System.out.println("Line: " + (yyline + 1) + ", column: " + (yycolumn + 1) + ", Lexical error in: " + yytext());
+    HashMap<String, String> error = new HashMap<>();
+    error.put("line", Integer.toString(yyline + 1));
+    error.put("column", Integer.toString(yycolumn +1));
+    error.put("text", yytext());
+    error.put("number", Integer.toString(errors.size() + 1));
+    errors.add( error );
 }
