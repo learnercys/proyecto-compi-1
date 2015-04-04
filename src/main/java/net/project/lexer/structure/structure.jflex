@@ -3,6 +3,7 @@ package net.project.lexer.structure;
 import java_cup.runtime.Symbol;
 import net.project.parser.structure.sym;
 
+
 %%
 
 %public
@@ -10,138 +11,128 @@ import net.project.parser.structure.sym;
 %unicode
 %line
 %column
-%ignorecase
 %cupsym sym
 %cup
 
 %{
-    private Symbol symbol( int type ) {
-        return new Symbol( type, yyline, yycolumn );
-    }
+    private Symbol symbol( int type ) { return new Symbol( type, yyline, yycolumn); }
 
     private Symbol symbol( int type, Object value ) {
-        return new Symbol( type, yyline, yycolumn, value );
+        return  new Symbol( type, yyline, yycolumn, value );
     }
-
 %}
 
-// single characters
-moreThan    = ">"
+// single chars
 lessThan    = "<"
 lessThanS   = "</"
-dQuote      = [\"]
-iString     = [^\"]+
-// is not a single char i'm sorry =D.
-iPath       = ([\/][^/]+)+
 whiteSpace  = [ \n\t\f]
 
 // single chars with meaning
-openBrace   = "{"
-closeBrace  = "}"
-comma       = ","
+closeParens = ")"
+dot         = "."
 equal       = "="
+moreThan    = ">"
+openParens  = "("
 semicolon   = ";"
 
-/*
- * Single words
- */
-
-// main tags -- single words
-swConfiguration = "configuration"
-swBackground    = "background"
-swFigure        = "figure"
-swDesign        = "design"
-
-// real single words.
-xName           = "x-nombre"
-xPicture        = "x-imagen"
-xType           = "x-tipo"
-xHero           = "x-heroe"
-xEnemy          = "x-enemigo"
-xLive           = "x-vida"
-xDestroy        = "x-destruir"
-xDescription    = "x-descripcion"
-xFinish         = "x-meta"
-xBlock          = "x-bloque"
+// tags single words
+xScenario       = "x-escenario"
+xCharacters     = "x-personajes"
+xHeroes         = "x-heroes"
+xEnemies        = "x-enemigos"
+xWalls          = "x-paredes"
+xExtras         = "x-extras"
+xWeapon         = "x-armas"
 xBonus          = "x-bonus"
-xBomb           = "x-bomb"
-xWeapon         = "x-arma"
-xCredit         = "x-creditos"
+xFinish         = "meta"
 
+
+// single words
+background      = "background"
+height          = "alto"
+width           = "ancho"
 
 // ER
-id          = [a-zA-Z][a-za-Z0-9_]+
-intValue    = [:digit:]+
-path        = {dQuote} {iPath} {dQuote}
-stringValue      = {dQuote} {iString} {dQuote}
+id              = [a-zA-Z][a-za-Z0-9_]+
+intValue        = [:digit:]+
 
 // main tags
+initScenario    = {lessThan}  {xScenario}
+endScenario     = {lessThanS} {xScenario} {moreThan}
 
-initConfiguration   = {lessThan}  {swConfiguration} {moreThan}
-endConfiguration    = {lessThanS} {swConfiguration} {moreThan}
+initCharacters  = {lessThan}  {xCharacters} {moreThan}
+endCharacters   = {lessThanS} {xCharacters} {moreThan}
 
-initBackground      = {lessThan}  {swBackground} {moreThan}
-endBackground       = {lessThanS} {swBackground} {moreThan}
+initHeroes      = {lessThan}  {xHeroes} {moreThan}
+endHeroes       = {lessThanS} {xHeroes} {moreThan}
 
-initFigure          = {lessThan}  {swFigure} {moreThan}
-endFigure           = {lessThanS} {swFigure} {moreThan}
+initEnemies     = {lessThan}  {xEnemies} {moreThan}
+endEnemies      = {lessThanS} {xEnemies} {moreThan}
 
-initDesign          = {lessThan}  {swDesign} {moreThan}
-endDesign           = {lessThanS} {swDesign} {moreThan}
+initWalls       = {lessThan}  {xWalls} {moreThan}
+endWalls        = {lessThanS} {xWalls} {moreThan}
 
+initExtras      = {lessThan}  {xExtras} {moreThan}
+endExtras       = {lessThanS} {xExtras} {moreThan}
+
+initWeapons     = {lessThan}  {xWeapon} {moreThan}
+endWeapons      = {lessThanS} {xWeapon} {moreThan}
+
+initBonus       = {lessThan}  {xBonus} {moreThan}
+endBonus        = {lessThanS} {xBonus} {moreThan}
+
+finish          = {lessThan} {xFinish} {moreThan}
 
 %%
 
-// main  tags
+// main tags
 
-{initConfiguration} { return symbol( sym.init_configuration ); }
-{endConfiguration}  { return symbol( sym.end_configuration ); }
+{initScenario} { return symbol( sym.init_scenario ); }
+{endScenario}  { return symbol( sym.end_scenario ); }
 
-{initBackground}    { return symbol( sym.init_background ); }
-{endBackground}     { return symbol( sym.end_configuration ); }
+{initCharacters}    { return symbol( sym.init_characters ); }
+{endCharacters}     { return symbol( sym.end_characters ); }
 
-{initFigure}        { return symbol( sym.init_figure ); }
-{endFigure}         { return symbol( sym.end_figure ); }
+{initHeroes}    { return symbol( sym.init_heroes ); }
+{endHeroes}     { return symbol( sym.end_heroes ); }
 
-{initDesign}        { return symbol( sym.init_design ); }
-{endDesign}         { return symbol( sym.end_design ); }
+{initEnemies}   { return symbol( sym.init_enemies ); }
+{endEnemies}    { return symbol( sym.end_enemies ); }
+
+{initWalls}     { return symbol( sym.init_walls ); }
+{endWalls}      { return symbol( sym.end_walls ); }
+
+{initExtras}    { return symbol( sym.init_extras ); }
+{endExtras}     { return symbol( sym.end_extras ); }
+
+{initWeapons}   { return symbol( sym.init_weapons ); }
+{endWeapons}    { return symbol( sym.end_weapons ); }
+
+{initBonus}     { return symbol( sym.init_bonus ); }
+{endBonus}      { return symbol( sym.end_bonus ); }
+
+{finish}        { return symbol( sym.finish ); }
+
 
 // single words
-{xName}             { return symbol( sym.x_name ); }
-{xPicture}          { return symbol( sym.x_picture ); }
-{xType}             { return symbol( sym.x_type ); }
-{xHero}             { return symbol( sym.x_hero ); }
-{xEnemy}            { return symbol( sym.x_enemy ); }
-{xLive}             { return symbol( sym.x_live ); }
-{xDestroy}          { return symbol( sym.x_destroy ); }
-{xDescription}      { return symbol( sym.x_description ); }
-{xFinish}           { return symbol( sym.x_finish ); }
-{xBlock}            { return symbol( sym.x_block ); }
-{xBonus}            { return symbol( sym.x_bonus ); }
-{xBomb}             { return symbol( sym.x_bomb ); }
-{xWeapon}           { return symbol( sym.x_weapon ); }
-{xCredit}           { return symbol( sym.x_credit ); }
-
+{background}    { return symbol( sym.background ); }
+{height}        { return symbol( sym.height ); }
+{width}         { return symbol( sym.width ); }
 
 // single chars
-{comma}             { return symbol( sym.comma ); }
-{openBrace}         { return symbol( sym.open_brace ); }
-{closeBrace}        { return symbol( sym.close_brace ); }
-{equal}             { return symbol( sym.equal ); }
-{semicolon}         { return symbol( sym.semicolon ); }
+{equal}         { return symbol( sym.equal ); }
+{closeParens}   { return symbol( sym.close_parens ); }
+{dot}           { return symbol( sym.dot ); }
+{moreThan}      { return symbol( sym.more_than ); }
+{openParens}    { return symbol( sym.open_parens ); }
+{semicolon}     { return symbol( sym.semicolon ); }
 
 // ER
-{id}                { return symbol( sym.id ); }
-{path}              { return symbol( sym.path ); }
-{intValue}          { return symbol( sym.int_value ); }
-{stringValue}            { return symbol( sym.string_value ); }
+{id}            { return symbol( sym.id ); }
+{intValue}      { return symbol( sym.int_value ); }
 
-// ignore white spaces.
-
-{whiteSpace}        {/* the life is short, whitespace not.*/}
-
-// errors
+{whiteSpace}    {/* white spaces for dummies */}
 
 . {
-    System.out.println("Line: " + (yyline+1) + " Column: " + (yycolumn+1) + " - Lexical error in: " + yytext());
+    System.out.println("Line: " + (yyline + 1) + ", column: " + (yycolumn + 1) + ", Lexical error in: " + yytext());
 }

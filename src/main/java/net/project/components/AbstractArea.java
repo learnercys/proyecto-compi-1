@@ -81,6 +81,10 @@ public abstract class AbstractArea extends CodeArea {
         showError(title, title, body);
     }
 
+    protected void showError(String body ) {
+        showError("", body);
+    }
+
     abstract void doCompilation();
 
     abstract void resetArea();

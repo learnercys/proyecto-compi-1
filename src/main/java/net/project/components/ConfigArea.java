@@ -1,8 +1,8 @@
 package net.project.components;
 
-import net.project.lexer.scenario.ScenarioLexer;
-import net.project.parser.scenario.ScenarioParser;
-import java.io.IOException;
+import net.project.lexer.configuration.ConfigurationLexer;
+import net.project.parser.configuration.ConfigurationParser;
+
 import java.io.StringReader;
 
 
@@ -29,8 +29,8 @@ public class ConfigArea extends AbstractArea {
         }
 
         StringReader stringReader = new StringReader( this.getText() );
-        ScenarioLexer lexer = new ScenarioLexer(stringReader);
-        ScenarioParser parser = new ScenarioParser(lexer);
+        ConfigurationLexer lexer = new ConfigurationLexer(stringReader);
+        ConfigurationParser parser = new ConfigurationParser(lexer);
 
         try {
             parser.parse();
@@ -38,9 +38,7 @@ public class ConfigArea extends AbstractArea {
             if( parser.hasUnRecoveredSyntaxError ) {
                 showError("Syntax Error", "The app has an un-recovered syntax error, verify your structure.");
             }
-        } catch (IOException io ) {
-            // do nothing
-        } catch (Exception npe) {
+        }  catch (Exception npe) {
             // do nothing
         }
     }

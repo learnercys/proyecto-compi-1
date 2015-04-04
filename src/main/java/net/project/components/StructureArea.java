@@ -1,5 +1,6 @@
 package net.project.components;
 
+
 import net.project.lexer.structure.StructureLexer;
 import net.project.parser.structure.StructureParser;
 

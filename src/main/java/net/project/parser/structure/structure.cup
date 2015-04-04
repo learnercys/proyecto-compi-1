@@ -3,209 +3,190 @@ package net.project.parser.structure;
 import java_cup.runtime.Symbol;
 
 /*
- * Code inserted in StructureParser
+ * Inserted in ScenarioParser
  */
 parser code
 {:
-	public boolean hasUnRecoveredSyntaxError = false;
+    public boolean hasUnRecoveredSyntaxError = false;
 
-	public void syntax_error(Symbol cur_token) {
-		// nothing to do, just to avoid native syntax_error method.
-	}
+    public void syntax_error( Symbol currentToken ) {
+        // just to avoid native syntax_error method.
+    }
 
-	public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception {
-		// has some un-recovered syntax error(structure error)
-		this.hasUnRecoveredSyntaxError = true;
-	}
+    public void unrecovered_syntax_error( Symbol s ) throws java.lang.Exception {
+        // has an un-recovered syntax error(structure error)
+        this.hasUnRecoveredSyntaxError = true;
+    }
+
 :}
 
 /*
- * Terminals
+ *
  */
+
 terminal String
 
     // main structures (tags)
-    init_configuration,
-    end_configuration,
-    init_background,
-    end_background,
-    init_figure,
-    end_figure,
-    init_design,
-    end_design,
+    init_scenario,
+    end_scenario,
+    init_characters,
+    end_characters,
+    init_heroes,
+    end_heroes,
+    init_enemies,
+    end_enemies,
+    init_walls,
+    end_walls,
+    init_extras,
+    end_extras,
+    init_weapons,
+    end_weapons,
+    init_bonus,
+    end_bonus,
+    finish,
 
     // single chars
-    comma,
-    open_brace,
-    close_brace,
+    close_parens,
+    dot,
     equal,
+    more_than,
+    open_parens,
     semicolon,
+    comma,
 
     // single words
-    x_name,
-    x_picture,
-    x_type,
-    x_hero,
-    x_enemy,
-    x_live,
-    x_destroy,
-    x_description,
-    x_finish,
-    x_block,
-    x_bonus,
-    x_bomb,
-    x_weapon,
-    x_credit,
+    background,
+    height,
+    width,
 
     // ER
-    id,
-    path,
     int_value,
-    string_value;
+    id
+    ;
 
-
-/*
- * Non terminals
- */
 non terminal
     START,
-    ELEMENTS,
-    ELEMENT,
 
-    BACKGROUND,
-    BG_IN,
-    BG_OBJECT,
-    BG_ELEMENTS,
-    BG_ELEMENT,
-    BG_X_NAME,
-    BG_X_PICTURE,
+    SCN_ATTRS,
+    SCN_ATTR,
+    SCN_BACKGROUND,
+    SCN_WIDTH,
+    SCN_HEIGHT,
 
-    FIGURE,
-    FG_IN,
-    FG_OBJECT,
-    FG_ELEMENTS,
-    FG_ELEMENT,
-    FG_X_NAME,
-    FG_X_PICTURE,
-    FG_X_TYPE,
-    FG_X_TYPE_VALUE,
-    FG_X_LIVE,
-    FG_X_DESTROY,
-    FG_X_DESCRIPTION,
+    SCN_ELEMENTS,
+    SCN_ELEMENT,
 
-    DESIGN,
-    DG_IN,
-    DG_OBJECT,
-    DG_ELEMENTS,
-    DG_ELEMENT,
-    DG_X_NAME,
-    DG_X_TYPE,
-    DG_X_TYPE_VALUE,
-    DG_X_PICTURE,
-    DG_X_DESTROY,
-    DG_X_CREDIT;
+    CHARACTERS,
+    CHARACTERS_STR,
+    CHARACTER,
+    HEROES,
+    HERO,
+    ENEMIES,
+    ENEMIES_STR,
+    ENEMY,
 
-// init structure
-START::= init_configuration ELEMENTS end_configuration;
+    WALLS,
+    WALL,
+    WALL_INT,
 
-ELEMENTS::= ELEMENT ELEMENTS
-            | ELEMENT;
+    EXTRAS,
+    EXTRAS_STR,
+    EXTRAS_ELEMENT,
+    WEAPONS,
+    WEAPONS_STR,
+    WEAPON,
+    BONUS,
+    BONUS_STR,
+    BONUS_ELEMENT,
 
-ELEMENT::=  BACKGROUND
-            | FIGURE
-            | DESIGN;
-
+    FINISH;
 
 /*
- * Background structure
+ * <x-escenario attrs > /elements/ </x-escenario>
  */
-BACKGROUND::= init_background BG_IN end_background;
+START::= init_scenario SCN_ATTRS more_than SCN_ELEMENTS end_scenario;
 
-BG_IN::=    BG_OBJECT comma BG_IN
-            | BG_OBJECT;
+// "attr (; attr)* "
+SCN_ATTRS::= SCN_ATTRS semicolon SCN_ATTR
+             | SCN_ATTR;
 
-BG_OBJECT::= open_brace BG_ELEMENTS close_brace;
+SCN_ATTR::=  SCN_BACKGROUND
+           | SCN_WIDTH
+           | SCN_HEIGHT;
 
-BG_ELEMENTS::=  BG_ELEMENT BG_ELEMENTS
-                | BG_ELEMENT;
+// "background =  [a-z][a-z0-9]+"
+SCN_BACKGROUND::= background equal id;
 
-BG_ELEMENT::=   BG_X_NAME
-                | BG_X_PICTURE;
+// "ancho = [:digit:]+"
+SCN_WIDTH::= width equal int_value;
 
-BG_X_NAME::= x_name equal id semicolon;
-
-BG_X_PICTURE::= x_picture equal path semicolon;
-
-
- /*
-  * Figure structure.
-  */
-FIGURE::= init_figure FG_IN end_figure;
-
-FG_IN::=    FG_OBJECT comma FG_IN
-            | FG_OBJECT;
-
-FG_OBJECT::= open_brace FG_ELEMENTS close_brace;
-
-FG_ELEMENTS::=  FG_ELEMENT FG_ELEMENTS
-                | FG_ELEMENT;
-
-FG_ELEMENT::=   FG_X_NAME
-                | FG_X_PICTURE
-                | FG_X_TYPE
-                | FG_X_LIVE
-                | FG_X_DESTROY
-                | FG_X_DESCRIPTION;
-
-FG_X_NAME::= x_name equal id semicolon;
-
-FG_X_PICTURE::= x_picture equal path semicolon;
-
-FG_X_TYPE::=    x_type equal FG_X_TYPE_VALUE semicolon;
-
-FG_X_TYPE_VALUE::=  x_hero
-                    | x_enemy;
-
-FG_X_LIVE::= x_live equal int_value semicolon;
-
-FG_X_DESTROY::= x_destroy equal int_value semicolon;
-
-FG_X_DESCRIPTION::= x_description equal string_value semicolon;
+// "alto = [:digit:]+"
+SCN_HEIGHT::= height equal int_value;
 
 
+SCN_ELEMENTS::= SCN_ELEMENTS SCN_ELEMENT
+                | SCN_ELEMENT;
 
-/*
- * Design structure
- */
-DESIGN::= init_design DG_IN end_design;
+SCN_ELEMENT::=  CHARACTERS
+                | WALLS
+                | EXTRAS
+                | FINISH;
 
-DG_IN::=    DG_OBJECT comma DG_IN
-            | DG_OBJECT;
+// "<x-personajes> </x-personajes>"
+CHARACTERS::=   init_characters CHARACTERS_STR end_characters;
 
-DG_OBJECT::= open_brace DG_ELEMENTS close_brace;
+CHARACTERS_STR::=   CHARACTERS CHARACTER
+                    | CHARACTER;
 
-DG_ELEMENTS::= DG_ELEMENT DG_ELEMENTS
-                | DG_ELEMENT;
+CHARACTER::=    HEROES
+                | ENEMIES;
 
-DG_ELEMENT::=   DG_X_NAME
-                | DG_X_TYPE
-                | DG_X_PICTURE
-                | DG_X_DESTROY
-                | DG_X_CREDIT;
+// "<x-heroes> </x-heroes>"
+HEROES::= init_heroes HERO end_heroes;
 
-DG_X_NAME::= x_name equal id semicolon;
+// "hero_name ([:digit:], [:digit:])"
+HERO::= id open_parens int_value comma int_value close_parens;
 
-DG_X_TYPE::= x_type equal DG_X_TYPE_VALUE semicolon;
+// "<x-enemigos> </x-enemigos>"
+ENEMIES::= init_enemies ENEMIES_STR  end_enemies;
 
-DG_X_TYPE_VALUE::=  x_finish
-                    | x_block
-                    | x_bonus
-                    | x_bomb
-                    | x_weapon;
+ENEMIES_STR::=  ENEMIES_STR ENEMY
+                | ENEMY;
 
-DG_X_PICTURE::= x_picture equal path semicolon;
+// "enemy_name([:digit:], [:digit:])"
+ENEMY::= id open_parens int_value comma int_value close_parens;
 
-DG_X_DESTROY::= x_destroy equal int_value semicolon;
+WALLS::= init_walls WALL end_walls;
 
-DG_X_CREDIT::= x_credit equal int_value semicolon;
+WALL::= id open_parens WALL_INT comma WALL_INT close_parens;
+
+WALL_INT::= int_value
+            | int_value dot dot int_value;
+
+
+EXTRAS::= init_extras EXTRAS_STR  end_extras;
+
+EXTRAS_STR::=   EXTRAS_STR EXTRAS_ELEMENT
+                | EXTRAS_ELEMENT;
+
+EXTRAS_ELEMENT::=   WEAPONS
+                    | BONUS;
+
+WEAPONS::=  init_weapons WEAPONS_STR end_weapons;
+
+WEAPONS_STR::=  WEAPONS_STR WEAPON
+                | WEAPON;
+
+WEAPON::=       id open_parens int_value comma int_value close_parens;
+
+BONUS::=    init_bonus BONUS_STR end_bonus;
+
+BONUS_STR::=    BONUS_STR BONUS_ELEMENT
+                | BONUS_ELEMENT;
+
+BONUS_ELEMENT::= id open_parens int_value comma int_value close_parens;
+
+
+FINISH::= finish id open_parens int_value comma int_value close_parens finish;
+
 
