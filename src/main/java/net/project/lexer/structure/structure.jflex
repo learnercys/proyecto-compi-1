@@ -15,7 +15,10 @@ import net.project.parser.structure.sym;
 %cup
 
 %{
-    private Symbol symbol( int type ) { return new Symbol( type, yyline, yycolumn); }
+    private Symbol symbol( int type ) {
+        System.out.println("yytext(): " + yytext() );
+        return new Symbol( type, yyline, yycolumn);
+    }
 
     private Symbol symbol( int type, Object value ) {
         return  new Symbol( type, yyline, yycolumn, value );
@@ -29,6 +32,7 @@ whiteSpace  = [ \n\t\f]
 
 // single chars with meaning
 closeParens = ")"
+comma       = ","
 dot         = "."
 equal       = "="
 moreThan    = ">"
@@ -53,7 +57,7 @@ height          = "alto"
 width           = "ancho"
 
 // ER
-id              = [a-zA-Z][a-za-Z0-9_]+
+id              = [a-zA-Z][a-zA-Z0-9_]+
 intValue        = [:digit:]+
 
 // main tags
@@ -122,6 +126,7 @@ finish          = {lessThan} {xFinish} {moreThan}
 // single chars
 {equal}         { return symbol( sym.equal ); }
 {closeParens}   { return symbol( sym.close_parens ); }
+{comma}         { return symbol( sym.comma ); }
 {dot}           { return symbol( sym.dot ); }
 {moreThan}      { return symbol( sym.more_than ); }
 {openParens}    { return symbol( sym.open_parens ); }

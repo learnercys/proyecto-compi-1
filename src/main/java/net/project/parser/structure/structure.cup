@@ -86,6 +86,7 @@ non terminal
     ENEMY,
 
     WALLS,
+    WALLS_STR,
     WALL,
     WALL_INT,
 
@@ -137,8 +138,8 @@ SCN_ELEMENT::=  CHARACTERS
 // "<x-personajes> </x-personajes>"
 CHARACTERS::=   init_characters CHARACTERS_STR end_characters;
 
-CHARACTERS_STR::=   CHARACTERS CHARACTER
-                    | CHARACTER;
+CHARACTERS_STR::=   CHARACTER
+                    | CHARACTERS_STR CHARACTER;
 
 CHARACTER::=    HEROES
                 | ENEMIES;
@@ -152,13 +153,20 @@ HERO::= id open_parens int_value comma int_value close_parens;
 // "<x-enemigos> </x-enemigos>"
 ENEMIES::= init_enemies ENEMIES_STR  end_enemies;
 
-ENEMIES_STR::=  ENEMIES_STR ENEMY
-                | ENEMY;
+ENEMIES_STR::=  ENEMY
+                | ENEMIES_STR ENEMY;
 
 // "enemy_name([:digit:], [:digit:])"
 ENEMY::= id open_parens int_value comma int_value close_parens;
 
-WALLS::= init_walls WALL end_walls;
+
+/*
+ * walls structure
+ */
+WALLS::= init_walls WALLS_STR end_walls;
+
+WALLS_STR::=    WALL
+                | WALLS_STR WALL;
 
 WALL::= id open_parens WALL_INT comma WALL_INT close_parens;
 
@@ -166,6 +174,9 @@ WALL_INT::= int_value
             | int_value dot dot int_value;
 
 
+/*
+ * extras structure
+ */
 EXTRAS::= init_extras EXTRAS_STR  end_extras;
 
 EXTRAS_STR::=   EXTRAS_STR EXTRAS_ELEMENT
@@ -189,6 +200,9 @@ BONUS_STR::=    BONUS_STR BONUS_ELEMENT
 BONUS_ELEMENT::= id open_parens int_value comma int_value close_parens;
 
 
+/*
+ * finish structure
+ */
 FINISH::= finish id open_parens int_value comma int_value close_parens finish;
 
 
