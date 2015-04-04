@@ -21,7 +21,7 @@ public class ConfigArea extends AbstractArea {
      */
     public boolean hasErrors ( ) {
 
-        return lexer.hasErrors();
+        return lexer == null || lexer.hasErrors();
     }
 
     /**

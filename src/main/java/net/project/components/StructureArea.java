@@ -21,8 +21,7 @@ public class StructureArea extends AbstractArea {
      * @return has errors?
      */
     public boolean hasErrors ( ) {
-        return lexer.hasErrors();
-
+        return lexer == null || lexer.hasErrors();
     }
 
     /**

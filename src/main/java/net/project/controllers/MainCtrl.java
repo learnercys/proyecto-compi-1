@@ -92,6 +92,7 @@ public class MainCtrl implements Initializable{
         }
         showErrorsListItem.setDisable(!cArea.hasErrors());
         showSymbolsTableItem.setDisable(cArea.hasErrors());
+        executeGameItem.setDisable(cArea.hasErrors() || sArea.hasErrors());
         isSidebarOK.setValue(!cArea.hasErrors());
     }
 
@@ -111,6 +112,7 @@ public class MainCtrl implements Initializable{
         }
         showErrorsListItem.setDisable(!sArea.hasErrors());
         showSymbolsTableItem.setDisable(sArea.hasErrors());
+        executeGameItem.setDisable(cArea.hasErrors() || sArea.hasErrors());
         isPreviewOK.setValue(!sArea.hasErrors());
     }
 
