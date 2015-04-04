@@ -13,6 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -32,6 +33,9 @@ public class MainCtrl implements Initializable{
     @FXML private BorderPane root;
     @FXML private BorderPane cAreaContainer;
     @FXML private BorderPane sAreaContainer;
+    @FXML private MenuItem executeGameItem;
+    @FXML private MenuItem showErrorsListItem;
+    @FXML private MenuItem showSymbolsTableItem;
     @FXML private VBox noObjectsContainer;
     @FXML private VBox objectsContainer;
     @FXML private VBox noPreviewContainer;
@@ -74,18 +78,39 @@ public class MainCtrl implements Initializable{
 
     /**
      * load the configuration file
+     *
      */
     public void loadConfigFile () {
         cArea.doCompilation();
-
+        if( cArea.hasErrors() ) {
+            // has some errors
+            if(cArea.showConfirmation("Found Errors", "The configuration file has errors. do you want to see them")) {
+                showErrorsList();
+            }
+        } else {
+            // TODO load elements in sidebar
+        }
+        showErrorsListItem.setDisable(!cArea.hasErrors());
+        showSymbolsTableItem.setDisable(cArea.hasErrors());
         isSidebarOK.setValue(!cArea.hasErrors());
     }
 
     /**
-     * TODO load the structure file.
+     * load the structure file.
      */
     public void loadStructureFile ( ) {
         sArea.doCompilation();
+        if( sArea.hasErrors() ) {
+            // has some errors
+            if(sArea.showConfirmation("Found Errors", "The structure file has errors. do you want to see them")) {
+                showErrorsList();
+            }
+
+        } else {
+            // TODO load elements in preview area.
+        }
+        showErrorsListItem.setDisable(!sArea.hasErrors());
+        showSymbolsTableItem.setDisable(sArea.hasErrors());
         isPreviewOK.setValue(!sArea.hasErrors());
     }
 
@@ -113,7 +138,7 @@ public class MainCtrl implements Initializable{
         Stage aboutUs = new Stage();
         BorderPane aboutUsRoot = FXMLLoader.load(new URL( Main.appFXML + "/aboutusctrl.fxml"));
         aboutUs.setTitle("About us");
-        aboutUs.setScene( new Scene( aboutUsRoot ) );
+        aboutUs.setScene(new Scene(aboutUsRoot));
         aboutUs.show();
     }
 

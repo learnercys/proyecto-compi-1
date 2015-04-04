@@ -22,7 +22,6 @@ import net.project.parser.structure.sym;
     public ArrayList<HashMap<String,String>> errors = new ArrayList<>();
 
     private Symbol symbol( int type ) {
-        System.out.println("yytext(): " + yytext() );
         return new Symbol( type, yyline, yycolumn);
     }
 

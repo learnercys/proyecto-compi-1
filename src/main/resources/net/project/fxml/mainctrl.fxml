@@ -28,9 +28,9 @@
                             <items>
                                 <MenuItem mnemonicParsing="false" onAction="#loadConfigFile" text="Execute configuration file" />
                                 <MenuItem mnemonicParsing="false" onAction="#loadStructureFile" text="Execute structure file" />
-                                <MenuItem disable="true" mnemonicParsing="false" onAction="#executeGame" text="Execute game" />
-                                <MenuItem disable="true" mnemonicParsing="false" onAction="#showErrorsList" text="Errors list" />
-                                <MenuItem disable="true" mnemonicParsing="false" onAction="#showSymbolsTable" text="Symbols table" />
+                                <MenuItem fx:id="executeGameItem" disable="true" mnemonicParsing="false" onAction="#executeGame" text="Execute game" />
+                                <MenuItem fx:id="showErrorsListItem" disable="true" mnemonicParsing="false" onAction="#showErrorsList" text="Errors list" />
+                                <MenuItem fx:id="showSymbolsTableItem" disable="true" mnemonicParsing="false" onAction="#showSymbolsTable" text="Symbols table" />
                             </items>
                         </Menu>
                         <Menu mnemonicParsing="false" text="Help">

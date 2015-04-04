@@ -1,12 +1,14 @@
 package net.project.components;
 
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import net.project.utils.CFile;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Optional;
 
 /**
  * @author learnercys (learner.cys@gmail.com)
@@ -46,6 +48,19 @@ public abstract class AbstractArea extends CodeArea {
         } catch ( NullPointerException ex) {
             return false;
         }
+    }
+
+    public boolean showConfirmation ( String title, String header, String body ) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(body);
+        Optional<ButtonType> result = alert.showAndWait();
+        return result.get() == ButtonType.OK;
+    }
+
+    public boolean showConfirmation( String title, String body ) {
+        return showConfirmation(title, title, body);
     }
 
     public void removeText( ) {
