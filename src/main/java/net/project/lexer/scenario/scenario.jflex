@@ -7,7 +7,7 @@ import net.project.parser.scenario.sym;
 %%
 
 %public
-%class ScenearioLexer
+%class ScenarioLexer
 %unicode
 %line
 %column

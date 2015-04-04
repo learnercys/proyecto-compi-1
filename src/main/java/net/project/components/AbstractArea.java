@@ -1,5 +1,6 @@
 package net.project.components;
 
+import javafx.scene.control.Alert;
 import net.project.utils.CFile;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
@@ -66,6 +67,18 @@ public abstract class AbstractArea extends CodeArea {
 
     public CFile getFile ( ) {
         return this.file;
+    }
+
+    protected void showError( String title, String header, String body ) {
+        Alert errorModal = new Alert(Alert.AlertType.ERROR);
+        errorModal.setTitle(title);
+        errorModal.setHeaderText(header);
+        errorModal.setContentText(body);
+        errorModal.show();
+    }
+
+    protected void showError(String title, String body ) {
+        showError(title, title, body);
     }
 
     abstract void doCompilation();

@@ -73,7 +73,7 @@ public class MainCtrl implements Initializable{
     }
 
     /**
-     * TODO load the configuration file
+     * load the configuration file
      */
     public void loadConfigFile () {
         cArea.doCompilation();
@@ -89,7 +89,7 @@ public class MainCtrl implements Initializable{
     }
 
     /**
-     * TODO create a new File
+     *
      */
     public void newFile( ) {
         switch ( typeOfFile() ) {
@@ -160,7 +160,7 @@ public class MainCtrl implements Initializable{
     }
 
     /**
-     * TODO save the current file as a new file( or replace for another).
+     *
      */
     public void saveFileAs( ) {
         // and stupid trick
@@ -204,7 +204,7 @@ public class MainCtrl implements Initializable{
     }
 
     /**
-     * TODO save the current file.
+     *
      */
     public void saveFile( ) {
         int type = typeOfFile();
