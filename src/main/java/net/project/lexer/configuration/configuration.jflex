@@ -18,7 +18,11 @@ import net.project.parser.configuration.sym;
 %{
 
     public boolean hasErrors () {
-        return errors.size() != 0;
+        return errors.size() > 0;
+    }
+
+    public boolean hasSymbols() {
+        return symbols.size() > 0;
     }
 
     public ArrayList<HashMap<String, String>> errors = new ArrayList<>();
@@ -41,6 +45,7 @@ import net.project.parser.configuration.sym;
         s.put("scope", scope);
         s.put("column", Integer.toString(yycolumn));
         s.put("line", Integer.toString(yyline));
+        symbols.add(s);
     }
 
 %}

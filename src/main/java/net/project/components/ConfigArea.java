@@ -23,6 +23,10 @@ public class ConfigArea extends AbstractArea {
         return lexer != null && lexer.hasErrors();
     }
 
+    public boolean hasSymbols( ) {
+        return lexer != null && lexer.hasSymbols();
+    }
+
     public ConfigurationLexer getLexer() {
         return this.lexer;
     }
@@ -79,7 +83,9 @@ public class ConfigArea extends AbstractArea {
      * TODO reset symbols
      */
     public void resetSymbols() {
-
+        if( hasSymbols() ) {
+            this.lexer.symbols.clear();
+        }
     }
 
 

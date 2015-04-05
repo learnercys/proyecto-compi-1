@@ -29,34 +29,35 @@
             display: inline-block;
             padding: 10px 45px;
             text-align: left;
-            width: 45%;
         }
     </style>
 </head>
 <body>
 <div class="container">
     <div class="content">
-        <h2 class="text-center">Lexical Errors list</h2>
+        <h2 class="text-center">Symbols list</h2>
         <table class="table">
             <thead>
             <tr>
                 <th>#</th>
-                <th>Symbol Name</th>
                 <th>Type</th>
                 <th>Scope</th>
                 <th>Column</th>
                 <th>Line</th>
+                <th>File</th>
+                <th>Symbol</th>
             </tr>
             </thead>
             <tbody>
             {{#symbols}}
                 <tr>
                     <td>{{number}}</td>
-                    <td>{{text}}</td>
                     <td>{{type}}</td>
                     <td>{{scope}}</td>
                     <td>{{column}}</td>
                     <td>{{line}}</td>
+                    <td>{{file}}</td>
+                    <td>{{text}}</td>
                 </tr>
             {{/symbols}}
             </tbody>

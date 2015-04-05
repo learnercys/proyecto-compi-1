@@ -113,4 +113,6 @@ public abstract class AbstractArea extends CodeArea {
 
     abstract boolean hasErrors();
 
+    abstract boolean hasSymbols();
+
 }

@@ -101,8 +101,8 @@ public class MainCtrl implements Initializable{
             // TODO load elements in sidebar
         }
         showErrorsListItem.setDisable(!cArea.hasErrors());
-        showSymbolsTableItem.setDisable(cArea.hasErrors());
-        executeGameItem.setDisable(cArea.hasErrors() || sArea.hasErrors());
+        showSymbolsTableItem.setDisable(!(cArea.hasSymbols() || sArea.hasSymbols()));
+        executeGameItem.setDisable(!cArea.hasSymbols() || !sArea.hasSymbols());
         isSidebarOK.setValue(!cArea.hasErrors());
     }
 
@@ -123,11 +123,15 @@ public class MainCtrl implements Initializable{
             }
 
         } else {
+
+
             // TODO load elements in preview area.
         }
+
         showErrorsListItem.setDisable(!sArea.hasErrors());
-        showSymbolsTableItem.setDisable(sArea.hasErrors());
-        executeGameItem.setDisable(cArea.hasErrors() || sArea.hasErrors());
+
+        showSymbolsTableItem.setDisable(!(sArea.hasSymbols() || cArea.hasSymbols()));
+        executeGameItem.setDisable(!cArea.hasSymbols() || !sArea.hasSymbols());
         isPreviewOK.setValue(!sArea.hasErrors());
     }
 
@@ -154,6 +158,12 @@ public class MainCtrl implements Initializable{
                 !cArea.hasErrors()
                         && !sArea.hasErrors()
         );
+
+        showSymbolsTableItem.setDisable(
+                !(cArea.hasSymbols() || sArea.hasSymbols())
+        );
+
+        executeGameItem.setDisable(!cArea.hasSymbols() || !sArea.hasSymbols());
 
     }
 
@@ -302,7 +312,7 @@ public class MainCtrl implements Initializable{
     }
 
     /**
-     * TODO show the current error list
+     * show the current error list
      */
     public void showErrorsList ( ) {
         try {
@@ -325,9 +335,11 @@ public class MainCtrl implements Initializable{
     public void showSymbolsTable ( ) {
         try {
             MustacheFactory  mustacheFactory = new DefaultMustacheFactory();
-            Mustache mustache = mustacheFactory.compile(Main.appHTML + "/errors.mustache");
-            File tmpFile = new File("/tmp/project-errors.html");
-            mustache.execute(new PrintWriter( tmpFile ), cArea.getLexer()).flush();
+            Mustache mustache = mustacheFactory.compile(Main.appTemplates.getPath() + "/symbols-table.mustache");
+            File tmpFile = new File("/tmp/project-symbols.html");
+            S s = new S();
+            s.addAll(cArea.getLexer(), sArea.getLexer());
+            mustache.execute(new PrintWriter( tmpFile ), s).flush();
 
             showTable(CFile.read(tmpFile), "Symbols table");
         } catch (Exception e) {
@@ -370,11 +382,10 @@ public class MainCtrl implements Initializable{
 
     }
 
-    public class Errors {
+    private class Errors {
         public ArrayList<HashMap<String,String>> errors = new ArrayList<>();
 
         public void addAll(ConfigurationLexer c, StructureLexer s) {
-            System.out.println("addAll");
             if( c != null && c.hasErrors()) {
                 for (HashMap<String, String> error : c.errors) {
                     HashMap<String,String> tmp = new HashMap<>();
@@ -396,6 +407,40 @@ public class MainCtrl implements Initializable{
                     tmp.put("file", "structure");
                     tmp.put("number", Integer.toString(errors.size() + 1));
                     errors.add(tmp);
+                }
+            }
+        }
+    }
+
+    private class S {
+        public ArrayList<HashMap<String, String>> symbols = new ArrayList<>();
+
+        public void addAll(ConfigurationLexer c, StructureLexer s ) {
+            if( c != null && c.hasSymbols() ) {
+                for (HashMap<String, String> symbol : c.symbols) {
+                    HashMap<String, String> tmp = new HashMap<>();
+                    tmp.put("number", Integer.toString(symbols.size() + 1));
+                    tmp.put("text", symbol.get("text"));
+                    tmp.put("type", symbol.get("type"));
+                    tmp.put("scope", symbol.get("scope"));
+                    tmp.put("column", symbol.get("column"));
+                    tmp.put("line", symbol.get("line"));
+                    tmp.put("file", "configuration");
+                    symbols.add(tmp);
+                }
+            }
+            
+            if( s != null && s.hasSymbols() ) {
+                for (HashMap<String, String> symbol : s.symbols) {
+                    HashMap<String, String> tmp = new HashMap<>();
+                    tmp.put("number", Integer.toString(symbols.size() + 1));
+                    tmp.put("text", symbol.get("text"));
+                    tmp.put("type", symbol.get("type"));
+                    tmp.put("scope", symbol.get("scope"));
+                    tmp.put("column", symbol.get("column"));
+                    tmp.put("line", symbol.get("line"));
+                    tmp.put("file", "structure");
+                    symbols.add(tmp);
                 }
             }
         }

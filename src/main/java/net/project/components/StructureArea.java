@@ -24,6 +24,10 @@ public class StructureArea extends AbstractArea {
         return lexer != null && lexer.hasErrors();
     }
 
+    public boolean hasSymbols( ) {
+        return lexer != null && lexer.hasSymbols();
+    }
+
     public StructureLexer getLexer( ) {
         return this.lexer;
     }
@@ -75,7 +79,9 @@ public class StructureArea extends AbstractArea {
      * TODO reset symbols
      */
     public void resetSymbols() {
-
+        if( hasSymbols() ) {
+            this.lexer.symbols.clear();
+        }
     }
 
 }
