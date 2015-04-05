@@ -20,13 +20,25 @@ import net.project.parser.structure.sym;
     public boolean hasErrors() { return errors.size() != 0; }
 
     public ArrayList<HashMap<String,String>> errors = new ArrayList<>();
+    public ArrayList<HashMap<String, String>> symbols = new ArrayList<>();
 
-    private Symbol symbol( int type ) {
+    private Symbol symbol( int type, String typeName, String scope ) {
+        addSymbol( yytext(), typeName, scope );
         return new Symbol( type, yyline, yycolumn);
     }
 
-    private Symbol symbol( int type, Object value ) {
+    private Symbol symbol( int type, String value, String typeName, String scope ) {
+        addSymbol( value, typeName, scope );
         return  new Symbol( type, yyline, yycolumn, value );
+    }
+
+    private void addSymbol( String value, String typeName, String scope) {
+        HashMap<String, String> s = new HashMap<>();
+        s.put("text", value);
+        s.put("type", typeName);
+        s.put("scope", scope);
+        s.put("column", Integer.toString(yycolumn));
+        s.put("line", Integer.toString(yyline));
     }
 %}
 
@@ -96,50 +108,50 @@ finish          = {lessThan} {xFinish} {moreThan}
 
 // main tags
 
-{initScenario} { return symbol( sym.init_scenario ); }
-{endScenario}  { return symbol( sym.end_scenario ); }
+{initScenario} { return symbol( sym.init_scenario, "tag", "root" ); }
+{endScenario}  { return symbol( sym.end_scenario, "tag", "root" ); }
 
-{initCharacters}    { return symbol( sym.init_characters ); }
-{endCharacters}     { return symbol( sym.end_characters ); }
+{initCharacters}    { return symbol( sym.init_characters, "tag", "scenario tag" ); }
+{endCharacters}     { return symbol( sym.end_characters, "tag", "scenario tag" ); }
 
-{initHeroes}    { return symbol( sym.init_heroes ); }
-{endHeroes}     { return symbol( sym.end_heroes ); }
+{initHeroes}    { return symbol( sym.init_heroes, "tag", "characters tag" ); }
+{endHeroes}     { return symbol( sym.end_heroes, "tag", "characters tag" ); }
 
-{initEnemies}   { return symbol( sym.init_enemies ); }
-{endEnemies}    { return symbol( sym.end_enemies ); }
+{initEnemies}   { return symbol( sym.init_enemies, "tag", "characters tag" ); }
+{endEnemies}    { return symbol( sym.end_enemies, "tag", "characters tag" ); }
 
-{initWalls}     { return symbol( sym.init_walls ); }
-{endWalls}      { return symbol( sym.end_walls ); }
+{initWalls}     { return symbol( sym.init_walls, "tag", "scenario tag" ); }
+{endWalls}      { return symbol( sym.end_walls, "tag", "scenario tag" ); }
 
-{initExtras}    { return symbol( sym.init_extras ); }
-{endExtras}     { return symbol( sym.end_extras ); }
+{initExtras}    { return symbol( sym.init_extras, "tag", "scenario tag" ); }
+{endExtras}     { return symbol( sym.end_extras, "tag", "scenario tag" ); }
 
-{initWeapons}   { return symbol( sym.init_weapons ); }
-{endWeapons}    { return symbol( sym.end_weapons ); }
+{initWeapons}   { return symbol( sym.init_weapons, "tag", "extras tag" ); }
+{endWeapons}    { return symbol( sym.end_weapons, "tag", "extras tag" ); }
 
-{initBonus}     { return symbol( sym.init_bonus ); }
-{endBonus}      { return symbol( sym.end_bonus ); }
+{initBonus}     { return symbol( sym.init_bonus, "tag", "extras tag" ); }
+{endBonus}      { return symbol( sym.end_bonus, "tag", "extras tag" ); }
 
-{finish}        { return symbol( sym.finish ); }
+{finish}        { return symbol( sym.finish, "tag", "scenario tag"  ); }
 
 
 // single words
-{background}    { return symbol( sym.background ); }
-{height}        { return symbol( sym.height ); }
-{width}         { return symbol( sym.width ); }
+{background}    { return symbol( sym.background, "attribute", "scenario tag" ); }
+{height}        { return symbol( sym.height, "attribute", "scenario tag" ); }
+{width}         { return symbol( sym.width, "attribute", "scenario tag" ); }
 
 // single chars
-{equal}         { return symbol( sym.equal ); }
-{closeParens}   { return symbol( sym.close_parens ); }
-{comma}         { return symbol( sym.comma ); }
-{dot}           { return symbol( sym.dot ); }
-{moreThan}      { return symbol( sym.more_than ); }
-{openParens}    { return symbol( sym.open_parens ); }
-{semicolon}     { return symbol( sym.semicolon ); }
+{equal}         { return symbol( sym.equal, "assignation", "scenario tag" ); }
+{closeParens}   { return symbol( sym.close_parens, "params", "heroes, enemies, walls, weapon, bonus and finish tags" ); }
+{comma}         { return symbol( sym.comma, "params", "heroes, enemies, walls, weapon, bonus and finish tags" ); }
+{dot}           { return symbol( sym.dot, "params", "heroes, enemies, walls, weapon, bonus and finish tags" ); }
+{moreThan}      { return symbol( sym.more_than, "block", "root" ); }
+{openParens}    { return symbol( sym.open_parens, "params", "heroes, enemies, walls, weapon, bonus and finish tags" ); }
+{semicolon}     { return symbol( sym.semicolon, "block", "scenario tag" ); }
 
 // ER
-{id}            { return symbol( sym.id ); }
-{intValue}      { return symbol( sym.int_value ); }
+{id}            { return symbol( sym.id, yytext(), "id", "heroes, enemies, walls, weapon, bonus and finish tags" ); }
+{intValue}      { return symbol( sym.int_value, yytext(), "int", "params" ); }
 
 {whiteSpace}    {/* white spaces for dummies */}
 

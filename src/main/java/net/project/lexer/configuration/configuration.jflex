@@ -22,13 +22,25 @@ import net.project.parser.configuration.sym;
     }
 
     public ArrayList<HashMap<String, String>> errors = new ArrayList<>();
+    public ArrayList<HashMap<String, String>> symbols = new ArrayList<>();
 
-    private Symbol symbol( int type ) {
+    private Symbol symbol( int type, String typeName, String scope ) {
+        addSymbol( yytext(), typeName, scope );
         return new Symbol( type, yyline, yycolumn );
     }
 
-    private Symbol symbol( int type, Object value ) {
+    private Symbol symbol( int type, String value, String typeName, String scope ) {
+        addSymbol( value, typeName, scope );
         return new Symbol( type, yyline, yycolumn, value );
+    }
+
+    private void addSymbol(String value, String typeName, String scope ){
+        HashMap<String, String> s = new HashMap<>();
+        s.put("text", value);
+        s.put("type", typeName);
+        s.put("scope", scope);
+        s.put("column", Integer.toString(yycolumn));
+        s.put("line", Integer.toString(yyline));
     }
 
 %}
@@ -99,46 +111,46 @@ endDesign           = {lessThanS} {swDesign} {moreThan}
 
 // main  tags
 
-{initConfiguration} { return symbol( sym.init_configuration ); }
-{endConfiguration}  { return symbol( sym.end_configuration ); }
+{initConfiguration} { return symbol( sym.init_configuration, "main tags", "root" ); }
+{endConfiguration}  { return symbol( sym.end_configuration, "main tags", "root" ); }
 
-{initBackground}    { return symbol( sym.init_background ); }
-{endBackground}     { return symbol( sym.end_background ); }
+{initBackground}    { return symbol( sym.init_background, "main tags", "configuration tag" ); }
+{endBackground}     { return symbol( sym.end_background, "main tags", "configuration tag" ); }
 
-{initFigure}        { return symbol( sym.init_figure ); }
-{endFigure}         { return symbol( sym.end_figure ); }
+{initFigure}        { return symbol( sym.init_figure, "main tags", "configuration tag" ); }
+{endFigure}         { return symbol( sym.end_figure, "main tags", "configuration tag" ); }
 
-{initDesign}        { return symbol( sym.init_design ); }
-{endDesign}         { return symbol( sym.end_design ); }
+{initDesign}        { return symbol( sym.init_design, "main tags", "configuration tag" ); }
+{endDesign}         { return symbol( sym.end_design, "main tags", "configuration tag" ); }
 
 // single words
-{xName}             { return symbol( sym.x_name ); }
-{xPicture}          { return symbol( sym.x_picture ); }
-{xType}             { return symbol( sym.x_type ); }
-{xHero}             { return symbol( sym.x_hero ); }
-{xEnemy}            { return symbol( sym.x_enemy ); }
-{xLive}             { return symbol( sym.x_live ); }
-{xDestroy}          { return symbol( sym.x_destroy ); }
-{xDescription}      { return symbol( sym.x_description ); }
-{xFinish}           { return symbol( sym.x_finish ); }
-{xBlock}            { return symbol( sym.x_block ); }
-{xBonus}            { return symbol( sym.x_bonus ); }
-{xBomb}             { return symbol( sym.x_bomb ); }
-{xWeapon}           { return symbol( sym.x_weapon ); }
-{xCredit}           { return symbol( sym.x_credit ); }
+{xName}             { return symbol( sym.x_name, "attribute name", "objects" ); }
+{xPicture}          { return symbol( sym.x_picture, "attribute name", "objects" ); }
+{xType}             { return symbol( sym.x_type, "attribute name", "objects" ); }
+{xHero}             { return symbol( sym.x_hero, "attribute name", "figure tag" ); }
+{xEnemy}            { return symbol( sym.x_enemy, "attribute name", "figure tag" ); }
+{xLive}             { return symbol( sym.x_live, "attribute name", "figure tag" ); }
+{xDestroy}          { return symbol( sym.x_destroy, "attribute name", "figure and design tags" ); }
+{xDescription}      { return symbol( sym.x_description, "attribute name", "figure tag" ); }
+{xFinish}           { return symbol( sym.x_finish, "attribute value", "design tag" ); }
+{xBlock}            { return symbol( sym.x_block, "attribute value", "design tag" ); }
+{xBonus}            { return symbol( sym.x_bonus, "attribute value", "design tag" ); }
+{xBomb}             { return symbol( sym.x_bomb, "attribute value", "design tag" ); }
+{xWeapon}           { return symbol( sym.x_weapon, "attribute value", "design tag" ); }
+{xCredit}           { return symbol( sym.x_credit, "attribute value", "design tag" ); }
 
 
 // single chars
-{comma}             { return symbol( sym.comma ); }
-{openBrace}         { return symbol( sym.open_brace ); }
-{closeBrace}        { return symbol( sym.close_brace ); }
-{equal}             { return symbol( sym.equal ); }
-{semicolon}         { return symbol( sym.semicolon ); }
+{comma}             { return symbol( sym.comma, "blocks", "objects separation" ); }
+{openBrace}         { return symbol( sym.open_brace, "blocks", "background, figure and design tags" ); }
+{closeBrace}        { return symbol( sym.close_brace, "blocks", "background, figure an design tags" ); }
+{equal}             { return symbol( sym.equal, "assignation", "atribute assignation" ); }
+{semicolon}         { return symbol( sym.semicolon, "blocks", "attributes separation" ); }
 
 // ER
-{id}                { return symbol( sym.id, yytext() ); }
-{intValue}          { return symbol( sym.int_value, yytext() ); }
-{stringValue}       { return symbol( sym.string_value, yytext() ); }
+{id}                { return symbol( sym.id, yytext(), "id", "attribute value" ); }
+{intValue}          { return symbol( sym.int_value, yytext(), "integer", "attribute value" ); }
+{stringValue}       { return symbol( sym.string_value, yytext(), "string | path", "attribute value" ); }
 
 // ignore white spaces.
 
