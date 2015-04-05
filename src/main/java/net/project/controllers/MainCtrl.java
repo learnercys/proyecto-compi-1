@@ -330,7 +330,7 @@ public class MainCtrl implements Initializable{
     }
 
     /**
-     * TODO show the symbols table
+     * show the symbols table
      */
     public void showSymbolsTable ( ) {
         try {

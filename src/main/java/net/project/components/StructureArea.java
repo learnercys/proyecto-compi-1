@@ -76,7 +76,7 @@ public class StructureArea extends AbstractArea {
     }
 
     /**
-     * TODO reset symbols
+     * reset symbols
      */
     public void resetSymbols() {
         if( hasSymbols() ) {

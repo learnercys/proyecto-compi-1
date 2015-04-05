@@ -16,7 +16,7 @@ public class ConfigArea extends AbstractArea {
     private ConfigurationParser parser;
 
     /**
-     * TODO verify if the current area has errors
+     * verify if the current area has errors
      * @return has errors?
      */
     public boolean hasErrors ( ) {
@@ -80,7 +80,7 @@ public class ConfigArea extends AbstractArea {
     }
 
     /**
-     * TODO reset symbols
+     * reset symbols
      */
     public void resetSymbols() {
         if( hasSymbols() ) {
