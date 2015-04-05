@@ -1,10 +1,13 @@
 package net.project.controllers;
 
 import java.io.File;
+import java.io.PrintWriter;
 import java.net.URL;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 
+import com.github.mustachejava.DefaultMustacheFactory;
+import com.github.mustachejava.Mustache;
+import com.github.mustachejava.MustacheFactory;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
@@ -22,6 +25,8 @@ import javafx.stage.StageStyle;
 import net.project.Main;
 import net.project.components.ConfigArea;
 import net.project.components.StructureArea;
+import net.project.lexer.configuration.ConfigurationLexer;
+import net.project.lexer.structure.StructureLexer;
 import net.project.utils.CFile;
 
 
@@ -81,7 +86,12 @@ public class MainCtrl implements Initializable{
      *
      */
     public void loadConfigFile () {
+        cArea.resetErrors();
+        cArea.resetSymbols();
         cArea.doCompilation();
+        if( cArea.getText().trim().length() == 0 || !sArea.isSaved()) {
+            return;
+        }
         if( cArea.hasErrors() ) {
             // has some errors
             if(cArea.showConfirmation("Found Errors", "The configuration file has errors. do you want to see them")) {
@@ -100,7 +110,12 @@ public class MainCtrl implements Initializable{
      * load the structure file.
      */
     public void loadStructureFile ( ) {
+        sArea.resetErrors();
+        sArea.resetSymbols();
         sArea.doCompilation();
+        if( sArea.getText().trim().length() == 0 || !sArea.isSaved()) {
+            return;
+        }
         if( sArea.hasErrors() ) {
             // has some errors
             if(sArea.showConfirmation("Found Errors", "The structure file has errors. do you want to see them")) {
@@ -134,6 +149,12 @@ public class MainCtrl implements Initializable{
                 // error type, nothing to do.
                 break;
         }
+
+        showErrorsListItem.setDisable(
+                !cArea.hasErrors()
+                        && !sArea.hasErrors()
+        );
+
     }
 
     public void openAboutUs( ) throws Exception{
@@ -284,14 +305,45 @@ public class MainCtrl implements Initializable{
      * TODO show the current error list
      */
     public void showErrorsList ( ) {
+        try {
+            MustacheFactory mustacheFactory = new DefaultMustacheFactory();
+            Mustache mustache = mustacheFactory.compile(Main.appTemplates.getPath() + "/errors.mustache");
+            File tmpFile = new File("/tmp/project-errors.html");
+            Errors e = new Errors();
+            e.addAll(cArea.getLexer(), sArea.getLexer());
+            mustache.execute(new PrintWriter( tmpFile ), e).flush();
 
+            showTable(CFile.read(tmpFile), "Symbols table");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
      * TODO show the symbols table
      */
     public void showSymbolsTable ( ) {
+        try {
+            MustacheFactory  mustacheFactory = new DefaultMustacheFactory();
+            Mustache mustache = mustacheFactory.compile(Main.appHTML + "/errors.mustache");
+            File tmpFile = new File("/tmp/project-errors.html");
+            mustache.execute(new PrintWriter( tmpFile ), cArea.getLexer()).flush();
 
+            showTable(CFile.read(tmpFile), "Symbols table");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void showTable( String html, String title)  throws Exception{
+        Stage table = new Stage(StageStyle.DECORATED);
+        FXMLLoader loader = new FXMLLoader(new URL(Main.appFXML + "/tablectrl.fxml"));
+
+        table.setScene(new Scene(loader.load()));
+        TableCtrl tableCtrl = loader.getController();
+        tableCtrl.initData( html, title );
+        table.setMaximized(true);
+        table.show();
     }
 
     @Override
@@ -316,6 +368,37 @@ public class MainCtrl implements Initializable{
         noPreviewContainer.managedProperty().bind(noPreviewContainer.visibleProperty());
         noPreviewContainer.visibleProperty().bind(isPreviewOK.not());
 
+    }
+
+    public class Errors {
+        public ArrayList<HashMap<String,String>> errors = new ArrayList<>();
+
+        public void addAll(ConfigurationLexer c, StructureLexer s) {
+            System.out.println("addAll");
+            if( c != null && c.hasErrors()) {
+                for (HashMap<String, String> error : c.errors) {
+                    HashMap<String,String> tmp = new HashMap<>();
+                    tmp.put("line", error.get("line"));
+                    tmp.put("column", error.get("column"));
+                    tmp.put("text", error.get("text"));
+                    tmp.put("file", "configuration");
+                    tmp.put("number", Integer.toString(errors.size() + 1));
+                    errors.add(tmp);
+                }
+            }
+
+            if( s != null && s.hasErrors() ) {
+                for (HashMap<String, String> error : s.errors) {
+                    HashMap<String,String> tmp = new HashMap<>();
+                    tmp.put("line", error.get("line"));
+                    tmp.put("column", error.get("column"));
+                    tmp.put("text", error.get("text"));
+                    tmp.put("file", "structure");
+                    tmp.put("number", Integer.toString(errors.size() + 1));
+                    errors.add(tmp);
+                }
+            }
+        }
     }
 
     private interface FileType {

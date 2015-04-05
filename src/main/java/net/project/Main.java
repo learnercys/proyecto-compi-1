@@ -15,6 +15,7 @@ public class Main extends Application {
 
     public static final String APP_TITLE = "Game solution";
     public static URL appBase;
+    public static URL appTemplates;
     public static String appFXML;
     public static String appHTML;
 
@@ -24,6 +25,7 @@ public class Main extends Application {
         appBase = getClass().getResource("");
         appFXML = getClass().getResource("fxml").toString();
         appHTML = getClass().getResource("html").toString();
+        appTemplates = getClass().getResource("html");
 
         FXMLLoader loader = new FXMLLoader( new URL( appFXML + "/mainctrl.fxml"));
 

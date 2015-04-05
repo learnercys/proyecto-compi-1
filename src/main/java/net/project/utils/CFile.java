@@ -25,7 +25,7 @@ public class CFile extends File {
         return read(this);
     }
 
-    public String read( File file ) {
+    public static String read( File file ) {
         StringBuilder stringBuilder = new StringBuilder();
         BufferedReader bufferedReader = null;
 

@@ -12,6 +12,7 @@ dependencies {
     compile group: 'de.jflex', name: 'jflex', version: '1.6.0'
     compile group: 'net.sf.squirrel-sql.thirdparty-non-maven', name: 'java-cup', version: '0.11a'
     compile group: 'org.fxmisc.richtext', name: 'richtextfx', version: '0.6.3'
+    compile group: 'com.github.spullara.mustache.java', name: 'compiler', version: '0.9.0'
 }
 
 sourceSets {

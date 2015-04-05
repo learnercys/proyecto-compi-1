@@ -21,9 +21,12 @@ public class StructureArea extends AbstractArea {
      * @return has errors?
      */
     public boolean hasErrors ( ) {
-        return lexer == null || lexer.hasErrors();
+        return lexer != null && lexer.hasErrors();
     }
 
+    public StructureLexer getLexer( ) {
+        return this.lexer;
+    }
     /**
      * do compilation to structure area.
      */
@@ -60,10 +63,12 @@ public class StructureArea extends AbstractArea {
     }
 
     /**
-     * TODO reset errors
+     * reset errors
      */
     public void resetErrors() {
-
+        if( hasErrors() ) {
+            this.lexer.errors.clear();
+        }
     }
 
     /**

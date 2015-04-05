@@ -20,8 +20,11 @@ public class ConfigArea extends AbstractArea {
      * @return has errors?
      */
     public boolean hasErrors ( ) {
+        return lexer != null && lexer.hasErrors();
+    }
 
-        return lexer == null || lexer.hasErrors();
+    public ConfigurationLexer getLexer() {
+        return this.lexer;
     }
 
     /**
@@ -60,13 +63,16 @@ public class ConfigArea extends AbstractArea {
         resetErrors();
         removeText();
         setFile(null);
+
     }
 
     /**
-     * TODO reset errors.
+     * reset errors.
      */
     public void resetErrors() {
-
+        if( hasErrors() ) {
+            this.lexer.errors.clear();
+        }
     }
 
     /**
