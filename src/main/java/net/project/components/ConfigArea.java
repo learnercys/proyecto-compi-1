@@ -31,6 +31,8 @@ public class ConfigArea extends AbstractArea {
         return this.lexer;
     }
 
+    public ConfigurationParser getParser() { return this.parser; }
+
     /**
      * do compilation to configuration area.
      */

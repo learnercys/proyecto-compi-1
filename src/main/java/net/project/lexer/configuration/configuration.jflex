@@ -45,6 +45,7 @@ import net.project.parser.configuration.sym;
         s.put("scope", scope);
         s.put("column", Integer.toString(yycolumn));
         s.put("line", Integer.toString(yyline));
+        //System.out.println("text: " + value);
         symbols.add(s);
     }
 

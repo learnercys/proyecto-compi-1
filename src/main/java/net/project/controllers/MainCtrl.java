@@ -14,10 +14,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -35,20 +38,26 @@ import net.project.utils.CFile;
  */
 public class MainCtrl implements Initializable{
 
+    final Canvas canvasSidebar = new Canvas(200,200);
+
     @FXML private BorderPane root;
     @FXML private BorderPane cAreaContainer;
     @FXML private BorderPane sAreaContainer;
+    @FXML private FlowPane sidebarCanvasContainer;
     @FXML private MenuItem executeGameItem;
     @FXML private MenuItem showErrorsListItem;
     @FXML private MenuItem showSymbolsTableItem;
     @FXML private VBox noObjectsContainer;
     @FXML private VBox objectsContainer;
-    @FXML private VBox noPreviewContainer;
 
-    private BooleanProperty isSidebarOK = new SimpleBooleanProperty(false);
+    @FXML private VBox noPreviewContainer;
+    private ArrayList<HashMap<String, String>> symbols = new ArrayList<>();
     private BooleanProperty isPreviewOK = new SimpleBooleanProperty(false);
-    private StructureArea sArea;
+    private BooleanProperty isSidebarOK = new SimpleBooleanProperty(false);
+    private int currentSymbolIndex = -1;
+    private GraphicsContext sidebarGC;
     private ConfigArea cArea;
+    private StructureArea sArea;
 
     private int typeOfFile ( ) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -98,7 +107,19 @@ public class MainCtrl implements Initializable{
                 showErrorsList();
             }
         } else {
-            // TODO load elements in sidebar
+
+            // load elements in symbols
+            symbols.clear();
+            symbols.addAll(cArea.getParser().backgrounds);
+            System.out.println("cArea.getParser().backgrounds.size(): " + cArea.getParser().backgrounds.size() );
+            symbols.addAll(cArea.getParser().figures);
+            System.out.println("cArea.getParser().figures.size(): " + cArea.getParser().figures.size());
+            symbols.addAll(cArea.getParser().designs);
+            System.out.println("cArea.getParser().designs.size(): " + cArea.getParser().designs.size());
+            currentSymbolIndex = -1;
+
+            // load elements in sidebar
+            nextSymbol();
         }
         showErrorsListItem.setDisable(!cArea.hasErrors());
         showSymbolsTableItem.setDisable(!(cArea.hasSymbols() || sArea.hasSymbols()));
@@ -167,6 +188,16 @@ public class MainCtrl implements Initializable{
 
     }
 
+    /**
+     * show the next symbol
+     */
+    public void nextSymbol( ) {
+        if(currentSymbolIndex < symbols.size()) {
+            currentSymbolIndex++;
+            showSymbolsSidebar();
+        }
+    }
+
     public void openAboutUs( ) throws Exception{
         Stage aboutUs = new Stage();
         BorderPane aboutUsRoot = FXMLLoader.load(new URL( Main.appFXML + "/aboutusctrl.fxml"));
@@ -218,6 +249,15 @@ public class MainCtrl implements Initializable{
         }
     }
 
+    /**
+     * show the previous symbol
+     */
+    public void previousSymbol() {
+        if(currentSymbolIndex != 0 ) {
+            currentSymbolIndex--;
+            showSymbolsSidebar();
+        }
+    }
     /**
      *
      */
@@ -330,6 +370,12 @@ public class MainCtrl implements Initializable{
     }
 
     /**
+     * TODO show current symbol
+     */
+    public void showSymbolsSidebar( ) {
+        System.out.println("currentSymbolIndex: " + currentSymbolIndex );
+    }
+    /**
      * show the symbols table
      */
     public void showSymbolsTable ( ) {
@@ -379,6 +425,12 @@ public class MainCtrl implements Initializable{
         // preview
         noPreviewContainer.managedProperty().bind(noPreviewContainer.visibleProperty());
         noPreviewContainer.visibleProperty().bind(isPreviewOK.not());
+
+        // canvas
+        sidebarGC = canvasSidebar.getGraphicsContext2D();
+
+        sidebarCanvasContainer.getChildren().add(canvasSidebar);
+
 
     }
 
