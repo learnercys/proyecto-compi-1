@@ -1,6 +1,7 @@
 package net.project.controllers;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.util.*;
@@ -16,12 +17,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -47,6 +48,7 @@ public class MainCtrl implements Initializable{
     @FXML private MenuItem executeGameItem;
     @FXML private MenuItem showErrorsListItem;
     @FXML private MenuItem showSymbolsTableItem;
+    @FXML private TextArea sidebarText;
     @FXML private VBox noObjectsContainer;
     @FXML private VBox objectsContainer;
 
@@ -111,11 +113,8 @@ public class MainCtrl implements Initializable{
             // load elements in symbols
             symbols.clear();
             symbols.addAll(cArea.getParser().backgrounds);
-            System.out.println("cArea.getParser().backgrounds.size(): " + cArea.getParser().backgrounds.size() );
             symbols.addAll(cArea.getParser().figures);
-            System.out.println("cArea.getParser().figures.size(): " + cArea.getParser().figures.size());
             symbols.addAll(cArea.getParser().designs);
-            System.out.println("cArea.getParser().designs.size(): " + cArea.getParser().designs.size());
             currentSymbolIndex = -1;
 
             // load elements in sidebar
@@ -192,9 +191,13 @@ public class MainCtrl implements Initializable{
      * show the next symbol
      */
     public void nextSymbol( ) {
-        if(currentSymbolIndex < symbols.size()) {
+        if(currentSymbolIndex < symbols.size() - 1) {
             currentSymbolIndex++;
-            showSymbolsSidebar();
+            try {
+                showSymbolsSidebar();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -253,9 +256,13 @@ public class MainCtrl implements Initializable{
      * show the previous symbol
      */
     public void previousSymbol() {
-        if(currentSymbolIndex != 0 ) {
+        if(currentSymbolIndex > 0 ) {
             currentSymbolIndex--;
-            showSymbolsSidebar();
+            try {
+                showSymbolsSidebar();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
     /**
@@ -372,8 +379,39 @@ public class MainCtrl implements Initializable{
     /**
      * TODO show current symbol
      */
-    public void showSymbolsSidebar( ) {
-        System.out.println("currentSymbolIndex: " + currentSymbolIndex );
+    public void showSymbolsSidebar( ) throws IOException{
+        HashMap<String, String> cElement = symbols.get(currentSymbolIndex);
+        sidebarGC.setFill(Color.WHITE);
+        sidebarGC.fillRect(0,0,200,200);
+        sidebarGC.drawImage(new Image(new File(cElement.get("picture").substring(1, cElement.get("picture").length() - 1)).toURI().toString()), 0, 0, 200, 200);
+        sidebarText.setText("");
+        String text = "";
+        switch (cElement.get("scope")) {
+            case "background":
+                text = "name: " + cElement.get("name");
+                break;
+            case "figure":
+                text = "name: " + cElement.get("name");
+                text += "\ntype: " + cElement.get("type");
+                text += "\nlive: " + cElement.get("live");
+                if (cElement.get("type").equals("enemy")) {
+                    text += "\ndestroy: " + cElement.get("destroy");
+                }
+                text += "\ndescription: " + cElement.get("description");
+                break;
+            case "design":
+                text = "name: " + cElement.get("name");
+                text += "\ntype: " + cElement.get("type");
+                if(cElement.containsKey("destroy")) {
+                    text += "\ndestroy: " + cElement.get("destroy");
+                }
+                if (cElement.containsKey("credit")) {
+                    text += "\ncredit: " + cElement.get("credit");
+                }
+                break;
+        }
+
+        sidebarText.setText(text);
     }
     /**
      * show the symbols table

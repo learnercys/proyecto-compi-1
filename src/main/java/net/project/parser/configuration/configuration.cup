@@ -204,7 +204,7 @@ FG_OBJECT::= open_brace FG_ELEMENTS close_brace{:
         figure.put("description", this.parser.currentDescription);
     }
 
-    figure.put("scope", "figures");
+    figure.put("scope", "figure");
     this.parser.figures.add(figure);
     this.parser.currentName = null;
     this.parser.currentPicture = null;
