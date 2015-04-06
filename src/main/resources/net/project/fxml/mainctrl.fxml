@@ -59,31 +59,28 @@
                   <BorderPane fx:id="sAreaContainer" prefHeight="200.0" prefWidth="200.0" />
                </content>
             </Tab>
-          <Tab text="Preview">
+          <Tab fx:id="previewTab" onSelectionChanged="#onPreviewSelected" text="Preview">
                <content>
-                  <GridPane alignment="CENTER">
-                    <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
+                  <VBox maxHeight="1.7976931348623157E308" prefHeight="400.0">
                      <children>
-                        <VBox fx:id="noPreviewContainer" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                        <VBox fx:id="noPreviewContainer" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="400.0">
                            <children>
                               <Label styleClass="h1" text="There is no preview to show" textAlignment="CENTER" />
                            </children>
                         </VBox>
+                        <BorderPane fx:id="gameContainer" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="600.0" prefWidth="800.0" />
                      </children>
-                  </GridPane>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </VBox>
                </content>
           </Tab>
         </tabs>
       </TabPane>
    </center>
    <left>
-      <VBox fx:id="sidebarContainer" alignment="TOP_CENTER" minWidth="250.0" prefHeight="200.0" prefWidth="200.0" styleClass="sidebar" BorderPane.alignment="CENTER">
+      <VBox alignment="TOP_CENTER" minWidth="250.0" prefHeight="200.0" prefWidth="200.0" styleClass="sidebar" BorderPane.alignment="CENTER">
          <children>
             <VBox fx:id="objectsContainer" alignment="CENTER" maxHeight="1.7976931348623157E308" prefHeight="200.0" prefWidth="100.0" styleClass="row-xs-6">
                <children>

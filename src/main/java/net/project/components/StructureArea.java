@@ -31,6 +31,8 @@ public class StructureArea extends AbstractArea {
     public StructureLexer getLexer( ) {
         return this.lexer;
     }
+
+    public StructureParser getParser() { return this.parser; }
     /**
      * do compilation to structure area.
      */

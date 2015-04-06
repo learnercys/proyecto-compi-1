@@ -1,6 +1,8 @@
 package net.project.parser.structure;
 
 import java_cup.runtime.Symbol;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /*
  * Inserted in ScenarioParser
@@ -8,6 +10,21 @@ import java_cup.runtime.Symbol;
 parser code
 {:
     public boolean hasUnRecoveredSyntaxError = false;
+
+    public String bg;
+    public int width;
+    public int height;
+
+    public String initA, initB, endA, endB;
+
+    public HashMap<String, String> hero = new HashMap<>();
+    public HashMap<String, String> finish = new HashMap<>();
+    public ArrayList<HashMap<String, String>> enemies = new ArrayList<>();
+    public ArrayList<HashMap<String, String>> walls = new ArrayList<>();
+
+    public ArrayList<HashMap<String, String>> weapons = new ArrayList<>();
+    public ArrayList<HashMap<String, String>> bonusList = new ArrayList<>();
+
 
     public void syntax_error( Symbol currentToken ) {
         // just to avoid native syntax_error method.
@@ -88,7 +105,8 @@ non terminal
     WALLS,
     WALLS_STR,
     WALL,
-    WALL_INT,
+    WALL_INT_A,
+    WALL_INT_B,
 
     EXTRAS,
     EXTRAS_STR,
@@ -118,13 +136,19 @@ SCN_ATTR::=  SCN_BACKGROUND
            | SCN_HEIGHT;
 
 // "background =  [a-z][a-z0-9]+"
-SCN_BACKGROUND::= background equal id;
+SCN_BACKGROUND::= background equal id:bg{:
+    this.parser.bg = bg;
+:};
 
 // "ancho = [:digit:]+"
-SCN_WIDTH::= width equal int_value;
+SCN_WIDTH::= width equal int_value:w{:
+    this.parser.width = Integer.parseInt(w);
+:};
 
 // "alto = [:digit:]+"
-SCN_HEIGHT::= height equal int_value;
+SCN_HEIGHT::= height equal int_value:h{:
+    this.parser.height = Integer.parseInt(h);
+:};
 
 
 SCN_ELEMENTS::= SCN_ELEMENTS SCN_ELEMENT
@@ -148,7 +172,11 @@ CHARACTER::=    HEROES
 HEROES::= init_heroes HERO end_heroes;
 
 // "hero_name ([:digit:], [:digit:])"
-HERO::= id open_parens int_value comma int_value close_parens;
+HERO::= id:name open_parens int_value:initValue comma int_value:endValue close_parens{:
+    this.parser.hero.put("name", name);
+    this.parser.hero.put("init", initValue);
+    this.parser.hero.put("end", endValue);
+:};
 
 // "<x-enemigos> </x-enemigos>"
 ENEMIES::= init_enemies ENEMIES_STR  end_enemies;
@@ -157,7 +185,13 @@ ENEMIES_STR::=  ENEMY
                 | ENEMIES_STR ENEMY;
 
 // "enemy_name([:digit:], [:digit:])"
-ENEMY::= id open_parens int_value comma int_value close_parens;
+ENEMY::= id:name open_parens int_value:initValue comma int_value:endValue close_parens{:
+    HashMap<String, String> enemy = new HashMap<>();
+    enemy.put("name", name);
+    enemy.put("init", initValue);
+    enemy.put("end", endValue);
+    this.parser.enemies.add(enemy);
+:};
 
 
 /*
@@ -168,11 +202,39 @@ WALLS::= init_walls WALLS_STR end_walls;
 WALLS_STR::=    WALL
                 | WALLS_STR WALL;
 
-WALL::= id open_parens WALL_INT comma WALL_INT close_parens;
+WALL::= id:name open_parens WALL_INT_A comma WALL_INT_B close_parens{:
+    HashMap<String, String> wall = new HashMap<>();
+    wall.put("name", name);
+    wall.put("initA", this.parser.initA);
+    if( this.parser.endA != null) {
+        wall.put("endA", this.parser.endA);
+        this.parser.endA = null;
+    }
+    wall.put("initB", this.parser.initB);
+    if(this.parser.endA != null) {
+        wall.put("endB", this.parser.endB);
+        this.parser.endB = null;
+    }
+    this.parser.initA = null;
+    this.parser.initB = null;
+:};
 
-WALL_INT::= int_value
-            | int_value dot dot int_value;
 
+WALL_INT_A::=   int_value:initA{:
+                    this.parser.initA = initA;
+                :}
+                | int_value:initA dot dot int_value:endA{:
+                    this.parser.initA = initA;
+                    this.parser.endA = endA;
+                :};
+
+WALL_INT_B::=   int_value:initB{:
+                    this.parser.initB = initB;
+                :}
+                | int_value:initB dot dot int_value:endB{:
+                    this.parser.initB = initB;
+                    this.parser.endB = endB;
+                :};
 
 /*
  * extras structure
@@ -190,19 +252,35 @@ WEAPONS::=  init_weapons WEAPONS_STR end_weapons;
 WEAPONS_STR::=  WEAPONS_STR WEAPON
                 | WEAPON;
 
-WEAPON::=       id open_parens int_value comma int_value close_parens;
+WEAPON::=       id:name open_parens int_value:initValue comma int_value:endValue close_parens{:
+                    HashMap<String, String> weapon = new HashMap<>();
+                    weapon.put("name", name);
+                    weapon.put("init", initValue);
+                    weapon.put("end", endValue);
+                    this.parser.weapons.add(weapon);
+                :};
 
 BONUS::=    init_bonus BONUS_STR end_bonus;
 
 BONUS_STR::=    BONUS_STR BONUS_ELEMENT
                 | BONUS_ELEMENT;
 
-BONUS_ELEMENT::= id open_parens int_value comma int_value close_parens;
+BONUS_ELEMENT::= id:name open_parens int_value:initValue comma int_value:endValue close_parens{:
+                    HashMap<String, String> bonus = new HashMap<>();
+                    bonus.put("name", name);
+                    bonus.put("init", initValue);
+                    bonus.put("end", endValue);
+                    this.parser.bonusList.add(bonus);
+                :};
 
 
 /*
  * finish structure
  */
-FINISH::= finish id open_parens int_value comma int_value close_parens finish;
+FINISH::= finish id:name open_parens int_value:initValue comma int_value:endValue close_parens finish{:
+    this.parser.finish.put("name", name);
+    this.parser.finish.put("init", initValue);
+    this.parser.finish.put("end", endValue);
+:};
 
 

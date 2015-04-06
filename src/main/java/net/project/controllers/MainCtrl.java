@@ -41,6 +41,7 @@ public class MainCtrl implements Initializable{
 
     final Canvas canvasSidebar = new Canvas(200,200);
 
+    @FXML private BorderPane gameContainer;
     @FXML private BorderPane root;
     @FXML private BorderPane cAreaContainer;
     @FXML private BorderPane sAreaContainer;
@@ -48,6 +49,7 @@ public class MainCtrl implements Initializable{
     @FXML private MenuItem executeGameItem;
     @FXML private MenuItem showErrorsListItem;
     @FXML private MenuItem showSymbolsTableItem;
+    @FXML private Tab previewTab;
     @FXML private TextArea sidebarText;
     @FXML private VBox noObjectsContainer;
     @FXML private VBox objectsContainer;
@@ -197,6 +199,23 @@ public class MainCtrl implements Initializable{
                 showSymbolsSidebar();
             } catch (IOException e) {
                 e.printStackTrace();
+            }
+        }
+    }
+
+    public void onPreviewSelected() throws Exception{
+        if (previewTab.isSelected()) {
+            if( sArea.hasSymbols() && cArea.hasSymbols() ) {
+                isPreviewOK.setValue(true);
+                gameContainer.setVisible(true);
+                FXMLLoader loader = new FXMLLoader(new URL(Main.appFXML + "/gamectrl.fxml"));
+                gameContainer.setCenter(loader.load());
+                GameCtrl gameCtrl = loader.getController();
+                gameCtrl.setSymbols(symbols);
+                gameCtrl.initBackground(sArea.getParser().bg);
+            } else {
+                isPreviewOK.setValue(false);
+                gameContainer.setVisible(false);
             }
         }
     }
@@ -377,7 +396,7 @@ public class MainCtrl implements Initializable{
     }
 
     /**
-     * TODO show current symbol
+     * show current symbol
      */
     public void showSymbolsSidebar( ) throws IOException{
         HashMap<String, String> cElement = symbols.get(currentSymbolIndex);
