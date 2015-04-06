@@ -145,9 +145,12 @@ public class MainCtrl implements Initializable{
             }
 
         } else {
-
-
-            // TODO load elements in preview area.
+            // load elements in preview area.
+            try {
+                onPreviewSelected();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         showErrorsListItem.setDisable(!sArea.hasErrors());
@@ -213,6 +216,16 @@ public class MainCtrl implements Initializable{
                 GameCtrl gameCtrl = loader.getController();
                 gameCtrl.setSymbols(symbols);
                 gameCtrl.initBackground(sArea.getParser().bg);
+
+                gameCtrl.setSize(sArea.getParser().width, sArea.getParser().height);
+
+                gameCtrl.setHero(sArea.getParser().hero);
+
+                gameCtrl.setEnemies(sArea.getParser().enemies);
+                gameCtrl.setWeapons(sArea.getParser().weapons);
+                gameCtrl.setBonusList(sArea.getParser().bonusList);
+                gameCtrl.setFinish(sArea.getParser().finish);
+
             } else {
                 isPreviewOK.setValue(false);
                 gameContainer.setVisible(false);
@@ -521,6 +534,9 @@ public class MainCtrl implements Initializable{
         }
     }
 
+    /**
+     * The worst name ever.
+     */
     private class S {
         public ArrayList<HashMap<String, String>> symbols = new ArrayList<>();
 
