@@ -6,6 +6,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
+import net.project.parser.structure.StructureParser;
 
 import java.io.File;
 import java.net.URL;
@@ -39,6 +40,8 @@ public class GameCtrl implements Initializable{
     private ArrayList<HashMap<String, String>> weapons;
     private ArrayList<HashMap<String, String>> bombs;
     private ArrayList<HashMap<String, String>> bonusList;
+
+    private StructureParser parser;
 
     private HashMap<String, String> getSymbol(String name, String scope) {
         for (HashMap<String, String> symbol : this.symbols) {
@@ -156,6 +159,11 @@ public class GameCtrl implements Initializable{
         gameGC.drawImage(new Image(
                 new File(symbol.get("picture").substring(1, symbol.get("picture").length() - 1)).toURI().toString()
         ), this.nodeWidth * Integer.parseInt(finish.get("init")), this.nodeHeight * Integer.parseInt(finish.get("end")), this.nodeWidth, this.nodeHeight);
+    }
+
+    public void setParser(StructureParser parser) {
+        this.parser = parser;
+
     }
 
     @Override
